@@ -1,4 +1,4 @@
-﻿namespace Tracker
+﻿namespace Tracker.src.Domain.Entities
 {
     public class InvoiceItem
     {

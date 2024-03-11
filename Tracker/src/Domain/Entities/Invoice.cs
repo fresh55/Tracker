@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tracker
+namespace Tracker.src.Domain.Entities
 {
     public class Invoice
     {
