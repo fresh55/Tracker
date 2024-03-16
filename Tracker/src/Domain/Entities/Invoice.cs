@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
+
 namespace Tracker.src.Domain.Entities
 {
-    public class Invoice
+    public class Invoice : BaseEntity
     {
        
         public string InvoiceNumber { get; set; }

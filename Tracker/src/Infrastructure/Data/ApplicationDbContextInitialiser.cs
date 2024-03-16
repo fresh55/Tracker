@@ -67,8 +67,7 @@ namespace Tracker.src.Infrastructure.Data
             {
                 _context.Invoices.Add(new Invoice
                 {
-                  InvoiceNumber = "nekaj",
-                  shortDescription ="to je description"
+                  
                 });
 
                 await _context.SaveChangesAsync();
