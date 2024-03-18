@@ -8,10 +8,8 @@ namespace Tracker.src.Domain.Entities
     public class Invoice : BaseEntity
     {
        
-        public string InvoiceNumber { get; set; }
-   
-
-        public string shortDescription { get; set; }
+        public decimal TotalAmount { get; set; }
+        public string? InvoiceName { get; set; }
 
         
 

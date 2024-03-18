@@ -4,10 +4,11 @@ using Tracker.src.Domain.Entities;
 namespace Tracker.src.Application.Invoices.Commands.CreateInvoice;
 
 public record CreateInvoiceCommand : IRequest<int>
-{
-    public int ListId { get; init; }
+{   
 
     public string? Title { get; init; }
+
+    public decimal TotalAmount { get; init; }
 }
 
 public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand, int>
@@ -21,10 +22,10 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
 
     public async Task<int> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Invoice
-        {
-            
-        };
+        var entity = new Invoice();
+        
+            entity.TotalAmount = request.TotalAmount;
+            entity.InvoiceName = request.Title;
 
         entity.AddDomainEvent(new InvoiceCreatedEvent(entity));
 

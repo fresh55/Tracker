@@ -1,0 +1,27 @@
+﻿
+using Tracker.src.Application.Common.Interfaces;
+
+namespace Tracker.src.Application.Invoices.Queries.GetInvoices;
+
+    public class GetAllInvoices : IRequest<List<Invoice>>;
+    public class GetAllInvoicesHandler : IRequestHandler<GetAllInvoices, List<InvoiceDto>>
+    {
+        private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+    public GetAllInvoicesHandler(IApplicationDbContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
+
+    public async Task<List<InvoiceDto>> Handle(GetAllInvoices request, CancellationToken cancellationToken)
+    {
+        return await _context.Invoices
+            .AsNoTracking()
+            .ProjectTo<InvoiceDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
+    }
+
+}
+
