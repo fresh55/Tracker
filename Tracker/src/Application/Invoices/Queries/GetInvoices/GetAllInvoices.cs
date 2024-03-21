@@ -3,7 +3,7 @@ using Tracker.src.Application.Common.Interfaces;
 
 namespace Tracker.src.Application.Invoices.Queries.GetInvoices;
 
-    public class GetAllInvoices : IRequest<List<Invoice>>;
+    public class GetAllInvoices : IRequest<List<InvoiceDto>>;
     public class GetAllInvoicesHandler : IRequestHandler<GetAllInvoices, List<InvoiceDto>>
     {
         private readonly IApplicationDbContext _context;
