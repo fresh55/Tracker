@@ -4,8 +4,8 @@ using Tracker.src.Infrastructure.Identity;
 using Tracker.src.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-namespace Tracker.src.Infrastructure.Data
-{
+namespace Tracker.src.Infrastructure.Data;
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
@@ -20,4 +20,4 @@ namespace Tracker.src.Infrastructure.Data
         }
 
     }
-}
+

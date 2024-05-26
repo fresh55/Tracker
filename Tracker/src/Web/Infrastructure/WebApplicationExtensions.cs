@@ -2,8 +2,8 @@
 
 namespace Tracker.src.Web.Infrastructure;
 
-    public static  class WebApplicationExtensions
-    {
+public static class WebApplicationExtensions
+{
         public static RouteGroupBuilder MapGroup(this WebApplication app, EndpointGroupBase group)
         {
             var groupName = group.GetType().Name;

@@ -1,31 +1,43 @@
-using Microsoft.EntityFrameworkCore;
-using Tracker.src.Infrastructure;
+
+using Tracker;
+using Tracker.src.Application;
 using Tracker.src.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddWebServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     await app.InitialiseDatabaseAsync();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  
+    
 }
+// Add OpenAPI 3.0 document serving middleware
+// Available at: http://localhost:<port>/swagger/v1/swagger.json
+app.UseOpenApi();
 
-app.UseHttpsRedirection();
+// Add web UIs to interact with the document
+app.UseSwaggerUi(settings =>
+{
+    settings.Path = "/api";
+    
+});
 
-app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
+app.UseCors();
+
+app.MapRazorPages();
+
+app.MapEndpoints();
 
 app.Run();

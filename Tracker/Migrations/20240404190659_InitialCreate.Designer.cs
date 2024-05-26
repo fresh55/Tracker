@@ -12,7 +12,7 @@ using Tracker.src.Infrastructure.Data;
 namespace Tracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240316095702_InitialCreate")]
+    [Migration("20240404190659_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -172,7 +172,38 @@ namespace Tracker.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InvoiceNumber")
+                    b.Property<string>("InvoiceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Tracker.src.Domain.Entities.InvoiceItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -182,39 +213,13 @@ namespace Tracker.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("shortDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("Tracker.src.Domain.Entities.InvoiceItem", b =>
-                {
-                    b.Property<int>("InvoiceItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceItemId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PricePerUnit")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("InvoiceItemId");
-
-                    b.HasIndex("InvoiceId");
+                    b.HasKey("Id");
 
                     b.ToTable("InvoiceItems");
                 });
@@ -333,17 +338,6 @@ namespace Tracker.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Tracker.src.Domain.Entities.InvoiceItem", b =>
-                {
-                    b.HasOne("Tracker.src.Domain.Entities.Invoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Invoice");
                 });
 #pragma warning restore 612, 618
         }

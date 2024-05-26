@@ -1,8 +1,9 @@
-﻿import * as React from "react"
+﻿
+import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { FolderPlus } from 'lucide-react' 
-import { Button } from "./ui/button"
+import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogClose,
@@ -13,8 +14,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "./ui/label"
-import { Input } from "./ui/input"
+
+import  CreateInvoicePage  from "@/components/InputInvoice" 
 interface EmptyPlaceholderProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function EmptyPlaceholder({
@@ -22,6 +23,8 @@ export function EmptyPlaceholder({
     children,
     ...props
 }: EmptyPlaceholderProps) {
+  
+
     return (
         <div
             className={cn(
@@ -37,31 +40,15 @@ export function EmptyPlaceholder({
                         <Button> Add new invoice </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                            <DialogTitle>Add invoice</DialogTitle>
-                            <DialogDescription>
-                                Adding an invoice by entering details and submitting them in the system.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex items-center space-x-2">
-                            <div className="grid flex-1 gap-2">
-                                <Label htmlFor="link" className="sr-only">
-                                    Link
-                                </Label>
-                                <Input
-                                    id="picture" type="file"
-                                    
-                                />
+                 
+                        <div className="">
+                            <div className="">
+                             
+                                <CreateInvoicePage />
                             </div>
                         
                         </div>
-                        <DialogFooter className="sm:justify-start">
-                            <DialogClose asChild>
-                                <Button type="button" variant="secondary">
-                                    Close
-                                </Button>
-                            </DialogClose>
-                        </DialogFooter>
+                        
                     </DialogContent>
                 </Dialog>
             </div>

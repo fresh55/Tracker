@@ -1,20 +1,28 @@
-﻿        using Microsoft.EntityFrameworkCore;
-        using System;
-        using Tracker.src.Infrastructure.Data;
+﻿
+using Tracker.src.Application.Common.Interfaces;
+using Tracker.src.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
 
-        namespace Tracker.src.Infrastructure
-        {
-            public static class DependencyInjection
-            {
-                public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-                {
-                    var connectionString = configuration.GetConnectionString("DefaultConnection");
-                    Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
-                    services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-                    services.AddScoped<ApplicationDbContextInitialiser>();
-            return services;
-                }
-            }
-        }
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
+
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<ApplicationDbContextInitialiser>();
+        
+        return services;
+    }
+}
+
 
 

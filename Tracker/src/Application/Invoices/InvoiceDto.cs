@@ -9,6 +9,8 @@ public class InvoiceDto
     public int Id { get; set; }
     public decimal TotalAmount { get; set; }
     public string? InvoiceName { get; set; }
+    public DateTime Date { get; set; }
+     
 
     private class Mapping : Profile
     {

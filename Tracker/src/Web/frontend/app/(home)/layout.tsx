@@ -8,9 +8,9 @@ export default function homeLayout({
     return (
 
 
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col ">
             
-            <div className="flex flex-3  w-full overflow-hidden ">
+            <div className="flex flex-3  w-full ">
 
             <aside className="relative top-0  flex h-screen w-[320px] flex-col gap-3 border-r  transition-transform duration-75 max-lg:fixed lg:w-[340px] max-lg:-translate-x-full pt-3 lg:pt-3">
                
