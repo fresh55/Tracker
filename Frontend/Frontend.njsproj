@@ -1,106 +1,111 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <SchemaVersion>2.0</SchemaVersion>
-        <ProjectGuid>{58a9567c-5499-4b38-bb4c-66a40ac152d4}</ProjectGuid>
-        <ProjectHome>.</ProjectHome>
-        <ProjectView>ShowAllFiles</ProjectView>
-        <StartupFile>tailwind.config.ts</StartupFile>
-        <WorkingDirectory>.</WorkingDirectory>
-        <OutputPath>.</OutputPath>
-        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-        <EnableTypeScript>true</EnableTypeScript>
-        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
-        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
-    <ItemGroup>
-        <Content Include=".eslintrc.json" />
-        <Content Include="components.json" />
-        <Content Include="package-lock.json" />
-        <Content Include="package.json" />
-        <None Include="tsconfig.json" />
-        <Content Include="README.md" />
-        <None Include="middleware.ts" />
-        <None Include="tailwind.config.ts" />
-        <Content Include="app\globals.css" />
-        <Content Include="app\favicon.ico" />
-        <None Include="app\layout.tsx" />
-        <None Include="components\Container.tsx" />
-        <None Include="components\Header.tsx" />
-        <None Include="components\Icons.tsx" />
-        <None Include="components\InputInvoice.tsx" />
-        <None Include="components\Logo.tsx" />
-        <None Include="lib\clientApi.ts" />
-        <None Include="lib\utils.ts" />
-        <Content Include="public\logo1.png" />
-        <Content Include="public\next.svg" />
-        <Content Include="public\vercel.svg" />
-        <None Include="app\(home)\layout.tsx" />
-        <None Include="app\(home)\page.tsx" />
-        <None Include="app\(home)\components\EmptyPlaceholder.tsx" />
-        <None Include="app\(home)\components\Invoices.tsx" />
-        <None Include="components\header\HeaderLogo.tsx" />
-        <None Include="components\ui\badge.tsx" />
-        <None Include="components\ui\button.tsx" />
-        <None Include="components\ui\card.tsx" />
-        <None Include="components\ui\dialog.tsx" />
-        <None Include="components\ui\form.tsx" />
-        <None Include="components\ui\input.tsx" />
-        <None Include="components\ui\label.tsx" />
-        <None Include="components\ui\table.tsx" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="app" />
-        <Folder Include="app\(home)" />
-        <Folder Include="app\(home)\components" />
-        <Folder Include="components" />
-        <Folder Include="components\header" />
-        <Folder Include="components\ui" />
-        <Folder Include="Frontend" />
-        <Folder Include="lib" />
-        <Folder Include="public" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
-    <ProjectExtensions>
-        <VisualStudio>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-            <WebProjectProperties>
-              <UseIIS>False</UseIIS>
-              <AutoAssignPort>True</AutoAssignPort>
-              <DevelopmentServerPort>0</DevelopmentServerPort>
-              <DevelopmentServerVPath>/</DevelopmentServerVPath>
-              <IISUrl>http://localhost:48022/</IISUrl>
-              <NTLMAuthentication>False</NTLMAuthentication>
-              <UseCustomServer>True</UseCustomServer>
-              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
-              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-            </WebProjectProperties>
-          </FlavorProperties>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
-            <WebProjectProperties>
-              <StartPageUrl>
-              </StartPageUrl>
-              <StartAction>CurrentPage</StartAction>
-              <AspNetDebugging>True</AspNetDebugging>
-              <SilverlightDebugging>False</SilverlightDebugging>
-              <NativeDebugging>False</NativeDebugging>
-              <SQLDebugging>False</SQLDebugging>
-              <ExternalProgram>
-              </ExternalProgram>
-              <StartExternalURL>
-              </StartExternalURL>
-              <StartCmdLineArguments>
-              </StartCmdLineArguments>
-              <StartWorkingDirectory>
-              </StartWorkingDirectory>
-              <EnableENC>False</EnableENC>
-              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
-            </WebProjectProperties>
-          </FlavorProperties>
-        </VisualStudio>
-    </ProjectExtensions>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{58a9567c-5499-4b38-bb4c-66a40ac152d4}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>tailwind.config.ts</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <EnableTypeScript>true</EnableTypeScript>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include=".dockerignore">
+      <SubType>Content</SubType>
+      <DependentUpon>Dockerfile</DependentUpon>
+    </Content>
+    <Content Include=".eslintrc.json" />
+    <Content Include="components.json" />
+    <None Include="Dockerfile" />
+    <Content Include="package-lock.json" />
+    <Content Include="package.json" />
+    <None Include="tsconfig.json" />
+    <Content Include="README.md" />
+    <None Include="middleware.ts" />
+    <None Include="tailwind.config.ts" />
+    <Content Include="app\globals.css" />
+    <Content Include="app\favicon.ico" />
+    <None Include="app\layout.tsx" />
+    <None Include="components\Container.tsx" />
+    <None Include="components\Header.tsx" />
+    <None Include="components\Icons.tsx" />
+    <None Include="components\InputInvoice.tsx" />
+    <None Include="components\Logo.tsx" />
+    <None Include="lib\clientApi.ts" />
+    <None Include="lib\utils.ts" />
+    <Content Include="public\logo1.png" />
+    <Content Include="public\next.svg" />
+    <Content Include="public\vercel.svg" />
+    <None Include="app\(home)\layout.tsx" />
+    <None Include="app\(home)\page.tsx" />
+    <None Include="app\(home)\components\EmptyPlaceholder.tsx" />
+    <None Include="app\(home)\components\Invoices.tsx" />
+    <None Include="components\header\HeaderLogo.tsx" />
+    <None Include="components\ui\badge.tsx" />
+    <None Include="components\ui\button.tsx" />
+    <None Include="components\ui\card.tsx" />
+    <None Include="components\ui\dialog.tsx" />
+    <None Include="components\ui\form.tsx" />
+    <None Include="components\ui\input.tsx" />
+    <None Include="components\ui\label.tsx" />
+    <None Include="components\ui\table.tsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app" />
+    <Folder Include="app\(home)" />
+    <Folder Include="app\(home)\components" />
+    <Folder Include="components" />
+    <Folder Include="components\header" />
+    <Folder Include="components\ui" />
+    <Folder Include="Frontend" />
+    <Folder Include="lib" />
+    <Folder Include="public" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

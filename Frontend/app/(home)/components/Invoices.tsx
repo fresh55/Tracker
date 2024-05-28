@@ -110,7 +110,7 @@ const InvoicesPage = ({ invoices }: InvoicesPageProps) => {
                             <TableRow key={invoice.id}>
                     
                                 <TableCell className="font-bold">{invoice.invoiceName}</TableCell>
-                                <TableCell>{invoice.date.toLocaleDateString()}</TableCell>
+                                <TableCell>datum</TableCell>
                                 <TableCell className="text-right">{invoice.totalAmount}</TableCell>
                                 <TableCell className="text-right">
                                     <Dialog open={open} onOpenChange={setOpen}>
@@ -121,7 +121,7 @@ const InvoicesPage = ({ invoices }: InvoicesPageProps) => {
                                             <DialogHeader>
                                                 <DialogTitle>Edit</DialogTitle>
                                                 <DialogDescription>
-                                                    Make changes to your profile here. Click save when you're done.
+                                                    Make changes to your profile here. Click save when you are done.
                                                 </DialogDescription>
                                             </DialogHeader>
                                             <div className="grid gap-4 py-4">
