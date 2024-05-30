@@ -64,9 +64,13 @@
     <Folder Include="components" />
     <Folder Include="components\header" />
     <Folder Include="components\ui" />
-    <Folder Include="Frontend" />
     <Folder Include="lib" />
     <Folder Include="public" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="components\SideBarNavigation.tsx">
+      <SubType>Code</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
