@@ -4,16 +4,13 @@ services:
     build:
       context: ./Backend
     ports:
-      - "5000:5000"
-    volumes:
-      - ./Backend:/app
-
+      - "5093:5093"
+  
   frontend:
     build:
       context: ./Frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./Frontend:/app
     environment:
       - NODE_ENV=development

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    output: 'standalone', // Enable standalone build
     async headers() {
         return [
             {
@@ -7,19 +8,9 @@ const nextConfig = {
                 source: "/app/checkout/page.tsx",
                 headers: [
                     { key: "Access-Control-Allow-Credentials", value: "true" },
-                    {
-                        key: "Access-Control-Allow-Origin",
-                        value: "http://localhost:5093",
-                    }, // replace this your actual origin
-                    {
-                        key: "Access-Control-Allow-Methods",
-                        value: "GET,DELETE,PATCH,POST,PUT",
-                    },
-                    {
-                        key: "Access-Control-Allow-Headers",
-                        value:
-                            "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-                    },
+                    { key: "Access-Control-Allow-Origin", value: "http://localhost:5093" }, // replace with your actual origin
+                    { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT" },
+                    { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
                 ],
             },
         ];
