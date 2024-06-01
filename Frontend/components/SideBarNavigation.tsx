@@ -4,73 +4,107 @@ import Link from "next/link"
 import { usePathname, useSelectedLayoutSegments } from "next/navigation"
 
 import { cn } from "@/lib/utils"
-
-export type SidebarNavItem = {
-    title: string
-    disabled?: boolean
-    active?: boolean
-
-} & (
-        | {
-            href: string;
-            items?: never;
-        }
-        | {
-            href?: string;
-            items: NavItem[];
-        }
-    );
+import {
+    Home,
+    Plus,
+    Code,
+    Crown,
+    Loader2,
+    Settings,
+    type LucideIcon,
+} from "lucide-react";
+import Logo from "./Logo";
+export type NavItem = {
+    title: string;
+    disabled?: boolean;
+    href: string;
+    active?: boolean;
+    icon: LucideIcon;
+};
+import { useTransition } from "react"
+  import { useRouter } from "next/navigation"
 export function SidebarDashboard() {
     const segments = useSelectedLayoutSegments()
-    const items: SidebarNavItem[] = [
+    const items: NavItem[] = [
         {
-            title: "Nadzorna ploca",
-            href: "/dashboard",
+            title: "Dashboard",
+            href: "/",
+           icon: Home,
+            active: segments.length === 0 || (segments.length === 1 && segments[0] === "")
+
             
         },
         {
-            title: "Nastavitve",
+            title: "Add invoice",
             href: "/dashboard/nastavitve",
-            
+
+    icon: Plus,
             active: segments.at(0) === "nastavitve"
         },
         {
-            title: "Status",
+            title: "Settings",
             href: "/dashboard/billing",
+            icon: Settings,
             
-        },
-        {
-            title: "Vasi oglasi",
-            href: "/dashboard/posts",
-          
-            active: segments.at(0) === "posts"
         },
     ];
 
     return (
-        <nav className="flex flex-col gap-0.5 px-3 font-medium">
-          
-               
-                <span className="ml-2 text-lg font-semibold">Bank App</span>
-           
-            <div></div>
-            {items.map((item, index) => {
-              
-                return (
-                    item.href && (
-                        <Link key={index} href={item.disabled ? "/" : item.href}>
-                            <span className={cn(
-                                "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                                item.active ? "bg-accent" : "transparent",
-                                item.disabled && "cursor-not-allowed opacity-80"
-                            )}>
-                                
-                                <span>{item.title}</span>
-                            </span>
-                        </Link>
-                    )
-                )
-            })}
+        <nav className="flex flex-col flex-1 flex-grow mt-4 mx-4">
+            <ul className="flex flex-col flex-1 gap-y-7">
+                <li>
+                    <h2 className="text-xs font-semibold leading-6 text-content">My tracker</h2>
+                    <ul className="mt-2 -mx-2 space-y-1">
+                        {items.map((item) => (
+                            <li key={item.title}>
+                                <NavLink item={item} />
+                            </li>
+                        ))}
+                    </ul>
+                </li>
+            </ul>
         </nav>
+
     )
+}
+
+const NavLink: React.FC<{ item: NavItem }> = ({ item }) => {
+
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+    return (
+        <Link
+            onClick={() => {
+              
+                    startTransition(() => {
+                        router.push(item.href);
+                    });
+                
+            }}
+            href={item.href}
+            className={cn(
+            "group flex gap-x-2 rounded-md  py-1 text-sm  font-medium leading-6 items-center hover:bg-gray-200 dark:hover:bg-gray-800 justify-between",
+            {
+                "bg-gray-200 dark:bg-gray-800": item.active,
+                "text-content-subtle pointer-events-none": item.disabled,
+            },
+        )}>
+            <div className="flex group gap-x-2 mx-2">
+                <span className="text-content-subtle border-border group-hover:shadow  flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
+                    {isPending ? (
+                        <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
+                    ) : (
+                        <item.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    )}
+                </span>
+                <p className="truncate whitespace-nowrap">{item.title}</p>
+            </div>
+            
+        </Link>
+
+
+    )
+
+
+
 }
