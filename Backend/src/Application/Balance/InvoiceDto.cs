@@ -6,7 +6,7 @@ public class InvoiceDto
 
 {
     
-    public int Id { get; set; }
+    public int Id { get; init; }
     public decimal TotalAmount { get; set; }
     public string? InvoiceName { get; set; }
     public DateTime Date { get; set; }

@@ -36,7 +36,7 @@ export function SidebarDashboard() {
         },
         {
             title: "Add invoice",
-            href: "/dashboard/nastavitve",
+            href: "/Add-invoice",
 
     icon: Plus,
             active: segments.at(0) === "nastavitve"

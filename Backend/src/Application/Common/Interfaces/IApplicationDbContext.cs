@@ -8,6 +8,12 @@ namespace Backend.src.Application.Common.Interfaces
     {
         DbSet<Invoice> Invoices { get; }
 
+        DbSet<Balance> Balances { get; }
+
+        DbSet<Expense> Expenses { get; }
+
+        DbSet<Income> Incomes { get; }
+
         DbSet<InvoiceItem> InvoiceItems { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
