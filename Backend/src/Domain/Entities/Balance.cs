@@ -10,7 +10,8 @@
         {
             TotalAmount = 0;
             Expenses = new List<Expense>();
-            
+            Incomes = new List<Income>();
+
         }
 
     public void AddExpense(Expense expense)
