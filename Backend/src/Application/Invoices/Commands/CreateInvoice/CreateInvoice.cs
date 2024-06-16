@@ -28,7 +28,7 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             entity.TotalAmount = request.TotalAmount;
             entity.InvoiceName = request.Title;
             entity.Date = request.DateAdded;
-        entity.AddDomainEvent(new InvoiceCreatedEvent(entity));
+            entity.AddDomainEvent(new InvoiceCreatedEvent(entity));
 
         _context.Invoices.Add(entity);
 
