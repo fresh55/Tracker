@@ -3,7 +3,7 @@ using Backend.src.Application.Common.Interfaces;
 using Backend.src.Domain.Entities;
 using Backend.src.Application.Balances2;
 
-namespace Backend.src.Application.Balance2.Commands.CreateBalance;
+namespace Backend.src.Application.Balances2.Commands.CreateBalance;
 
 public record CreateBalanceCommand : IRequest<int>
 {

@@ -4,6 +4,7 @@ using Backend.src.Application.Common.Interfaces;
 namespace Backend.src.Application.Invoices.Queries.GetInvoices;
 
 public class GetAllInvoices : IRequest<List<InvoiceDto>>;
+
     public class GetAllInvoicesHandler : IRequestHandler<GetAllInvoices, List<InvoiceDto>>
     {
         private readonly IApplicationDbContext _context;

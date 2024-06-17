@@ -3,11 +3,7 @@ using Backend.src.Application.Common.Interfaces;
 
 namespace Backend.src.Application.Balances2.Queries.GetTotalBalance;
 
-public class GetTotalBalance : IRequest<decimal>
-{
-
-   public int BalanceId { get; set; }
-}
+public record GetTotalBalance(int Id) : IRequest<decimal>;
 
 public class GetTotalBalanceHandler : IRequestHandler<GetTotalBalance, decimal>
 {
@@ -21,9 +17,8 @@ public class GetTotalBalanceHandler : IRequestHandler<GetTotalBalance, decimal>
 
     public async Task<decimal> Handle(GetTotalBalance request, CancellationToken cancellationToken)
     {
-        var balance = await _context.Balances
-            .FindAsync(new object[] { request.BalanceId }, cancellationToken);
-
+        var balance = await _context.Balances.FindAsync(request.Id, cancellationToken);
+        Console.WriteLine(balance.TotalAmount); 
         if (balance == null)
         {
             throw new Exception("Balance not found");
