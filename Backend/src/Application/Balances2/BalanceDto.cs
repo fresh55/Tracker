@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Backend.src.Domain.Entities;
+﻿using Backend.src.Application.Common.Interfaces;
 namespace Backend.src.Application.Balances2;
 
     public class BalanceDto
@@ -14,8 +13,11 @@ namespace Backend.src.Application.Balances2;
         {
             public Mapping()
             {
-                CreateMap<Balance, BalanceDto>();
-            }
+            CreateMap<Balance, BalanceDto>();
+            CreateMap<Expense, ExpenseDto>();
+            CreateMap<Income, IncomeDto>();
+         
+        }
         }
     }
 

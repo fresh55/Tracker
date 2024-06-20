@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
 namespace Backend.src.Domain.Entities
 {
     public class Income : BaseEntity
@@ -8,8 +8,10 @@ namespace Backend.src.Domain.Entities
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-
-        public Income(decimal amount, string description, DateTime date)
+        public int BalanceId { get; set; }
+        [JsonIgnore]
+        public Balance Balance { get; set; }  // Add this property
+         public Income(decimal amount, string description, DateTime date)
         {
             if (amount <= 0)
                 throw new ArgumentException("Amount must be greater than zero.");
@@ -17,6 +19,7 @@ namespace Backend.src.Domain.Entities
             Amount = amount;
             Description = description;
             Date = date;
+           
         }
     }
 }

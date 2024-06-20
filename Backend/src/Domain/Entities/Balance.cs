@@ -3,8 +3,9 @@
     public class Balance : BaseEntity   
     {
         public decimal TotalAmount { get; set; }
-        private List<Expense> Expenses { get; set; }
-        private List<Income> Incomes { get; set; }
+        public List<Expense> Expenses { get; set; }
+        public List<Income> Incomes { get; set; }
+
 
      public Balance()
         {
@@ -77,6 +78,7 @@
         public decimal GetTotalIncomes()
         {
             decimal total = 0;
+
             foreach (var income in Incomes)
             {
                 total += income.Amount;

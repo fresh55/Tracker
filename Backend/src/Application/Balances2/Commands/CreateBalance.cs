@@ -5,22 +5,20 @@ using Backend.src.Application.Balances2;
 
 namespace Backend.src.Application.Balances2.Commands.CreateBalance;
 
-public record CreateBalanceCommand : IRequest<int>
-{
-    public decimal Amount { get; init; }
-    public List<ExpenseDto> Expenses { get; init; }
-    public List<IncomeDto> Incomes { get; init; }
-}
-public class CreateBalanceCommandHandler : IRequestHandler<CreateBalanceCommand, int>
+public record CreateBalanceCommand : IRequest<BalanceDto>;
+public class CreateBalanceCommandHandler : IRequestHandler<CreateBalanceCommand, BalanceDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public CreateBalanceCommandHandler(IApplicationDbContext context)
+    public CreateBalanceCommandHandler(IApplicationDbContext context,IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
+
     }
 
-    public async Task<int> Handle(CreateBalanceCommand request, CancellationToken cancellationToken)
+    public async Task<BalanceDto> Handle(CreateBalanceCommand request, CancellationToken cancellationToken)
     {
         var entity = new Balance();
 
@@ -28,7 +26,7 @@ public class CreateBalanceCommandHandler : IRequestHandler<CreateBalanceCommand,
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return _mapper.Map<BalanceDto>(entity);
     }
 
     

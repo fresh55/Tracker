@@ -4,6 +4,7 @@ using Backend.src.Infrastructure.Identity;
 using Backend.src.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+
 namespace Backend.src.Infrastructure.Data;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
@@ -19,6 +20,11 @@ namespace Backend.src.Infrastructure.Data;
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+                builder.Entity<Balance>()
+               .HasMany(b => b.Incomes)
+               .WithOne(i => i.Balance)
+               .HasForeignKey(i => i.BalanceId);
+
         var decimalProps = builder.Model
    .GetEntityTypes()
    .SelectMany(t => t.GetProperties())

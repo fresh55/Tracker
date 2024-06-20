@@ -1,8 +1,9 @@
 using Backend.src.Application.Balances2;
 using Backend.src.Application.Balances2.Commands.CreateBalance;
 using  Backend.src.Application.Balances2.Commands.AddIncome;
-using Backend.src.Application.Balances2.Queries.GetTotalBalance;
-using Backend.src.Application.Invoices.Commands.DeleteInvoice;
+using Backend.src.Application.Balances2.Queries.GetBalance;
+using  Backend.src.Application.Balances2.Queries.GetTotalIncome;
+using Backend.src.Application.Balances2.Commands.AddExpense;
 namespace Backend.src.Web.Endpoints;
 
 public class Balance : EndpointGroupBase
@@ -12,10 +13,13 @@ public class Balance : EndpointGroupBase
         app.MapGroup(this)
             .MapPost(CreateBalance)
             .MapPost(AddIncome, "/addIncome")
-            .MapGet(GetTotalBalance, "{id}");
+            .MapPost(AddExpense, "/addExpense")
+            .MapGet(GetBalance, "{id}")
+            .MapGet(GetTotalIncome, "/getIncome/{id}");
+            
     }
 
-    public Task<int> CreateBalance(ISender sender, CreateBalanceCommand command)
+    public Task<BalanceDto> CreateBalance(ISender sender, CreateBalanceCommand command)
     {
 
         return sender.Send(command);
@@ -26,9 +30,18 @@ public class Balance : EndpointGroupBase
         return sender.Send(command);
     }
 
-    public async Task<decimal> GetTotalBalance(ISender sender, int id)
+    public Task<Expense> AddExpense(ISender sender, AddExpenseCommand command)
     {
-        return await sender.Send(new GetTotalBalance(id));
+        return sender.Send(command);
+    }
+    public async Task<BalanceDto> GetBalance(ISender sender, int id)
+    {
+        return await sender.Send(new GetBalance(id));
+    }
+
+    public  async Task<List<IncomeDto>> GetTotalIncome(ISender sender, int id)
+    {
+        return await sender.Send(new GetTotalIncome(id));
     }
 
 

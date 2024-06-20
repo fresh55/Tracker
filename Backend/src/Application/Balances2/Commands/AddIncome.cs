@@ -10,11 +10,11 @@ public record AddIncomeCommand : IRequest<Income>
     public decimal Amount { get; init; }
     public DateTime DateAdded { get; set; }
     public string Description  { get; set; }
-    public int Id { get; init; }
+    public int BalanceId  { get; init; }
 
 }
 
-public class AddIncomeCommandHandler : IRequestHandler<AddIncomeCommand,Income>
+public class AddIncomeCommandHandler : IRequestHandler<AddIncomeCommand, Income>
 {
     private readonly IApplicationDbContext _context;
 
@@ -25,16 +25,20 @@ public class AddIncomeCommandHandler : IRequestHandler<AddIncomeCommand,Income>
 
     public async Task<Income> Handle(AddIncomeCommand request, CancellationToken cancellationToken)
     {
-        var balance = await _context.Balances.FindAsync(request.Id);
+        var balance = await _context.Balances.FirstOrDefaultAsync(b => b.Id == request.BalanceId, cancellationToken);
         if (balance == null)
         {
             throw new Exception("Balance not found");
         }
 
         var income = new Income(request.Amount, request.Description, request.DateAdded);
+        // Add the income to the balance
+
+        // Add the income to the balance's income collection
         balance.AddIncome(income);
-       
+        await _context.SaveChangesAsync(cancellationToken);
 
         return income;
+       
     }
 }
