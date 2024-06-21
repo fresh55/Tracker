@@ -21,6 +21,7 @@ public class GetBalanceHandler : IRequestHandler<GetBalance, BalanceDto>
         var balance = await _context.Balances
           .Include(b => b.Incomes)
           .Include(b => b.Expenses)
+            .AsSplitQuery() // Use split query for this specific query
           .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
 
         if (balance == null)

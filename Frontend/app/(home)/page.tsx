@@ -8,56 +8,49 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Client, InvoiceDto } from '@/lib/clientApi';
+import  { Client, BalanceDto  } from '@/lib/clientApi';
 import { useEffect, useState } from "react";
 import InvoicesPage from "@/app/(home)/components/Invoices";
-export default function Home() {
-    const [invoices, setInvoices] = useState<InvoiceDto[]>([]);
-    const [totalAmount, setTotalAmount] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
 
+
+export default function Home() {
+    const [balance, setBalance] = useState<BalanceDto>(new BalanceDto());
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const client = new Client();
-        // Load all invoices
-        client.getAllInvoices()
-            .then(data => {
-                setInvoices(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("Failed to fetch invoices", error);
-                setLoading(false);
-            });
 
-        // Load total invoice amount
-        client.getTotalInvoiceAmount()
-            .then(total => {
-                setTotalAmount(`€${total.toLocaleString()}`);
+        client.getBalance(2) // Assuming '1' is the id of the balance you want to fetch
+            .then(data => {
+                setBalance(data);
                 setLoading(false);
             })
-            .catch(error => {
-                console.error("Failed to fetch total invoice amount", error);
+            .catch(err => {
+                console.error('Error fetching balance:', err);
+                setError('Error fetching balance');
                 setLoading(false);
             });
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+   
+   
 
+   
+    
+  
     return (
         <>
             <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                 <Card className="bg-gradient-to-r from-blue-500 to-blue-800 text-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
-                            Balance
+                            Balance 
                         </CardTitle>
                         
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{totalAmount}</div>
+                        <div className="text-2xl font-bold">{balance.totalAmount}</div>
                         <p className="text-xs text-white">
                             +20.1% from last month
                         </p>
@@ -66,12 +59,12 @@ export default function Home() {
                 <Card className="">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
-                            Income
+                            Incomes
                         </CardTitle>
 
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$45,231.89</div>
+                        <div className="text-2xl font-bold">€{balance.totalIncomesAmount}</div>
                         <p className="text-xs text-muted-foreground">
                             +20.1% from last month
                         </p>
@@ -81,12 +74,12 @@ export default function Home() {
                 <Card >
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
-                            Expenses
+                             Expenses
                         </CardTitle>
 
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$45,231.89</div>
+                        <div className="text-2xl font-bold">€{balance.totalExpensesAmount}</div>
                         <p className="text-xs text-muted-foreground">
                             +20.1% from last month
                         </p>
@@ -94,7 +87,7 @@ export default function Home() {
                 </Card>
 </div>
         
-            <InvoicesPage invoices={invoices} />
+            
         </>
        
     );

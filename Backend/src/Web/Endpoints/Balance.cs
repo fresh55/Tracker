@@ -2,7 +2,7 @@ using Backend.src.Application.Balances2;
 using Backend.src.Application.Balances2.Commands.CreateBalance;
 using  Backend.src.Application.Balances2.Commands.AddIncome;
 using Backend.src.Application.Balances2.Queries.GetBalance;
-using  Backend.src.Application.Balances2.Queries.GetTotalIncome;
+using Backend.src.Application.Balances2.Queries.GetAllIncomes;
 using Backend.src.Application.Balances2.Commands.AddExpense;
 namespace Backend.src.Web.Endpoints;
 

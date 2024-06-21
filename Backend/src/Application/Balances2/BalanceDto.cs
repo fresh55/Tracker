@@ -5,18 +5,18 @@ namespace Backend.src.Application.Balances2;
     {
     public int Id { get; set; }
     public decimal TotalAmount { get; set; }
-    public List<ExpenseDto> Expenses { get; set; }
-    public List<IncomeDto> Incomes { get; set; }
+    public decimal TotalExpensesAmount { get; set; }
+    public decimal TotalIncomesAmount { get; set; }
 
     // Add any additional properties or methods here
     private class Mapping : Profile
         {
             public Mapping()
             {
-            CreateMap<Balance, BalanceDto>();
-            CreateMap<Expense, ExpenseDto>();
-            CreateMap<Income, IncomeDto>();
-         
+            CreateMap<Balance, BalanceDto>()
+           .ForMember(dest => dest.TotalExpensesAmount, opt => opt.MapFrom(src => src.Expenses.Sum(e => e.Amount)))
+           .ForMember(dest => dest.TotalIncomesAmount, opt => opt.MapFrom(src => src.Incomes.Sum(i => i.Amount)));
+
         }
         }
     }
