@@ -1,4 +1,4 @@
-﻿lscnamespace Backend.src.Domain.Entities
+﻿namespace Backend.src.Domain.Entities
 {
     public class Balance : BaseEntity   
     {

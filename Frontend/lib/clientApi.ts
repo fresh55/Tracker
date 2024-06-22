@@ -805,6 +805,9 @@ export interface IIncomeDto {
 }
 
 export class TransactionDto implements ITransactionDto {
+    amount?: number;
+    dateAdded?: Date;
+    type?: string;
 
     constructor(data?: ITransactionDto) {
         if (data) {
@@ -816,6 +819,11 @@ export class TransactionDto implements ITransactionDto {
     }
 
     init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.dateAdded = _data["dateAdded"] ? new Date(_data["dateAdded"].toString()) : <any>undefined;
+            this.type = _data["type"];
+        }
     }
 
     static fromJS(data: any): TransactionDto {
@@ -827,11 +835,17 @@ export class TransactionDto implements ITransactionDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["dateAdded"] = this.dateAdded ? this.dateAdded.toISOString() : <any>undefined;
+        data["type"] = this.type;
         return data;
     }
 }
 
 export interface ITransactionDto {
+    amount?: number;
+    dateAdded?: Date;
+    type?: string;
 }
 
 export class InvoiceDto implements IInvoiceDto {

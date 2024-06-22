@@ -40,7 +40,7 @@ const TransactionsPage = () => {
         const fetchTransactions = async () => {
             const client = new Client();
             try {
-                const data = await client.getTransactions(1);
+                const data = await client.getTransactions(2);
                 setTransactions(data);
             } catch (error) {
                 console.error("Failed to fetch transactions:", error);
@@ -94,10 +94,10 @@ const TransactionsPage = () => {
                         </TableHeader>
                         <TableBody>
                             {transactions.map(transaction => (
-                                <TableRow key={transaction.id}>
-                                    <TableCell className="font-bold">{transaction.transactionName}</TableCell>
-                                    <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
-                                    <TableCell className="text-right">{transaction.totalAmount}</TableCell>
+                                <TableRow key={transaction.type}>
+                                    <TableCell className="font-bold">{transaction.type}</TableCell>
+                                    <TableCell> {transaction.dateAdded ? new Date(transaction.dateAdded).toDateString() : 'N/A'}</TableCell>
+                                    <TableCell className="text-right">{transaction.amount}</TableCell>
                                     <TableCell className="text-right">
                                         <Dialog open={open} onOpenChange={setOpen}>
                                             <DialogTrigger asChild>
@@ -117,7 +117,7 @@ const TransactionsPage = () => {
                                                         </Label>
                                                         <Input
                                                             id="name"
-                                                            defaultValue={transaction.transactionName}
+                                                            defaultValue={transaction.type}
                                                             className="col-span-3"
                                                         />
                                                     </div>
@@ -127,7 +127,7 @@ const TransactionsPage = () => {
                                                         </Label>
                                                         <Input
                                                             id="amount"
-                                                            defaultValue={transaction.totalAmount}
+                                                            defaultValue={transaction.amount}
                                                             className="col-span-3"
                                                         />
                                                     </div>
