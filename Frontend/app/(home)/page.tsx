@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import  { Client, BalanceDto  } from '@/lib/clientApi';
 import { useEffect, useState } from "react";
-import InvoicesPage from "@/app/(home)/components/Invoices";
+import TransactionsPage from "./components/Invoices"; 
 
 
 export default function Home() {
@@ -87,7 +87,7 @@ export default function Home() {
                 </Card>
 </div>
         
-            
+            <TransactionsPage/>
         </>
        
     );

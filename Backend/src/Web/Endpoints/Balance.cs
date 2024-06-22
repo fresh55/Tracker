@@ -4,6 +4,7 @@ using  Backend.src.Application.Balances2.Commands.AddIncome;
 using Backend.src.Application.Balances2.Queries.GetBalance;
 using Backend.src.Application.Balances2.Queries.GetAllIncomes;
 using Backend.src.Application.Balances2.Commands.AddExpense;
+using Backend.src.Application.Balances2.Queries.GetTransactions;
 namespace Backend.src.Web.Endpoints;
 
 public class Balance : EndpointGroupBase
@@ -15,7 +16,8 @@ public class Balance : EndpointGroupBase
             .MapPost(AddIncome, "/addIncome")
             .MapPost(AddExpense, "/addExpense")
             .MapGet(GetBalance, "{id}")
-            .MapGet(GetTotalIncome, "/getIncome/{id}");
+            .MapGet(GetTotalIncome, "/getIncome/{id}")
+            .MapGet(GetTransactions, "/getTransactions/{id}");  
             
     }
 
@@ -42,6 +44,11 @@ public class Balance : EndpointGroupBase
     public  async Task<List<IncomeDto>> GetTotalIncome(ISender sender, int id)
     {
         return await sender.Send(new GetTotalIncome(id));
+    }
+
+    public async Task<List<TransactionDto>> GetTransactions(ISender sender, int id)
+    {
+        return await sender.Send(new GetTransactions(id));
     }
 
 

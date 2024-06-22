@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Backend.src.Application.Common.Interfaces;
 
 namespace Backend.src.Application.Balances2.Queries.GetAllIncomes;
