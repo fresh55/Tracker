@@ -1,9 +1,12 @@
 ﻿
 using Backend.src.Application.Common.Interfaces;
 using Backend.src.Infrastructure.Data;
+using Backend.src.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
+using Backend.src.Domain.Constants;
+
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -19,7 +22,14 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitialiser>();
-        
+        services
+            .AddDefaultIdentity<ApplicationUser>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+        services.AddTransient<IIdentityService, IdentityService>();
+
+        services.AddAuthorization(options =>
+            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
         return services;
     }
 }
