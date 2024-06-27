@@ -10,6 +10,6 @@ namespace Backend.src.Application.Common.Interfaces;
         Task<bool> IsInRoleAsync(string userId, string role);
         Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
         Task<string> GetUserIdAsync(ClaimsPrincipal user);
-        Task<string> AuthenticateAsync(string email, string password);
+        Task<bool> AuthorizeAsync(string userId, string policyName);
         Task<ApplicationUser> GetCurrentUserAsync();
 }

@@ -7,7 +7,6 @@ import { useCallback, useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast";
 import { Client, RegisterRequest } from "@/lib/clientApi";
 import { useRouter } from "next/navigation";
 import { z } from 'zod';
@@ -92,8 +91,10 @@ const RegisterForm = () => {
                   {...register("password",{ required: true})}
                 />
                           <div className="mb-2">
-                              {errors.password && <span className="px-1 text-xs text-red-600">{errors.password.message}</span>}
-                 </div>
+                              {errors.password && typeof errors.password.message === 'string' && (
+                                  <span className="px-1 text-xs text-red-600">{errors.password.message}</span>
+                              )}
+                          </div>
               
              
               

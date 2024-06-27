@@ -43,7 +43,7 @@ export function SidebarDashboard() {
         },
         {
             title: "Settings",
-            href: "/dashboard/billing",
+            href: "/",
             icon: Settings,
             
         },

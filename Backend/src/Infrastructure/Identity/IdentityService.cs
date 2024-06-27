@@ -35,26 +35,22 @@ namespace Backend.src.Infrastructure.Identity
             _httpContextAccessor = httpContextAccessor; // Initialize IHttpContextAccessor
         }
 
-        public async Task<string> AuthenticateAsync(string email, string password)
+        public async Task<bool> AuthorizeAsync(string userId, string policyName)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(userId);
+
             if (user == null)
             {
-                return null;
+                return false;
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
-            if (!result.Succeeded)
-            {
-                return null;
-            }
-            
-            // Ensure the correct scheme is used for signing in
-            // Ensure the correct scheme is used for signing in
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
 
-            return user.Id; // Return user ID instead of token
+            var result = await _authorizationService.AuthorizeAsync(principal, policyName);
+
+            return result.Succeeded;
         }
+
 
         public async Task<string> GetUserIdAsync(ClaimsPrincipal user)
         {
