@@ -1,42 +1,34 @@
-﻿import { NextRequest, NextResponse } from 'next/server'
-
-const allowedOrigins = ['http://localhost:3000']
-const corsOptions = {
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-}
+import { cookies } from 'next/headers';
+import type { NextRequest } from 'next/server'
 
 
-export function middleware(request: NextRequest) {
-    // Check the origin from the request
-    const origin = request.headers.get('origin') ?? ''
-    const isAllowedOrigin = allowedOrigins.includes(origin)
+export async function middleware(request: NextRequest) {
 
-    // Handle preflighted requests
-    const isPreflight = request.method === 'OPTIONS'
+    let user = null;
+    try {
+        const response = await fetch("http://localhost:5093/api/User/getCurrentUserId", {
+            method: 'GET',
+            headers: {
+                Cookie: cookies().toString() 
+            }
 
-    if (isPreflight) {
-        const preflightHeaders = {
-            ...(isAllowedOrigin && { 'Access-Control-Allow-Origin': origin }),
-            ...corsOptions,
-        }
-        return NextResponse.json({}, { headers: preflightHeaders })
+        });
+        
+        user = await response.json();
+        console.log("User: ", user);
+    } catch (error) {
+        console.error("Error fetching current user:", error);
+        return null; // Handle error appropriately
+    } 
+   
+    if (!user && request.nextUrl.pathname  === '/') {
+        return Response.redirect(new URL('/login', request.url));
     }
-
-    // Handle simple requests
-    const response = NextResponse.next()
-
-    if (isAllowedOrigin) {
-        response.headers.set('Access-Control-Allow-Origin', origin)
+    if (user && request.nextUrl.pathname === '/login') {
+        return Response.redirect(new URL('/', request.url)); // Redirect to home page if user exists and tries to access login page
     }
-
-    Object.entries(corsOptions).forEach(([key, value]) => {
-        response.headers.set(key, value)
-    })
-
-    return response
 }
 
 export const config = {
-    matcher: '/api/:path*',
+    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

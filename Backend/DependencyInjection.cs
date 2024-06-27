@@ -2,8 +2,9 @@
 
 using Backend.src.Infrastructure.Data;
 using Backend.src.Application.Common.Interfaces;
-using System.Text.Json;
+using Backend.src.Web.Services;
 using System.Text.Json.Serialization;
+
 namespace Backend;
 
 public static class DependencyInjection
@@ -16,9 +17,13 @@ public static class DependencyInjection
             options.AddDefaultPolicy(
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
         });
+
+
+
+        services.AddScoped<IUser, CurrentUser>();
 
         services.AddHttpContextAccessor();
 
@@ -35,7 +40,8 @@ public static class DependencyInjection
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
-
+        // Use CORS policy
+        
         services.AddEndpointsApiExplorer();
         services.AddOpenApiDocument();
 

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { Client, LoginRequest } from '@/lib/clientApi';
+import { getCurrentUser } from '@/data/auth';
 export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [serverMessage, setServerMessage] = useState<string | null>(null);
@@ -32,9 +33,10 @@ export default function LoginForm() {
             loginRequest.email = data.email;
             loginRequest.password = data.password;
 
-            const response = await client.postApiUserLogin(false,false, loginRequest);
-            console.log(accessToken);
-            router.push('/');
+
+            const response  = await client.postApiUserLogin(true,true,loginRequest);
+            console.log(response);
+            router.push('/')
         } catch (error) {
             console.error("Failed to login:", error);
             setServerMessage("Failed to login");

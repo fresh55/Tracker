@@ -17,7 +17,7 @@ export default function Home() {
     const [balance, setBalance] = useState<BalanceDto>(new BalanceDto());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
+    
     useEffect(() => {
         const client = new Client();
 
@@ -33,14 +33,14 @@ export default function Home() {
             });
     }, []);
 
-   
-   
+
 
    
     
   
     return (
         <>
+      
             <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                 <Card className="bg-gradient-to-r from-blue-500 to-blue-800 text-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
