@@ -1,14 +1,14 @@
 import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server'
 
-
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5093';
 export async function middleware(request: NextRequest) {
-      console.log("Middleware");
+     
   
     let user = null;
-    console.log(cookies().toString())
+    console.log(backendUrl);
     try {
-        const response = await fetch("http://localhost:5093/api/User/getCurrentUserId", {
+        const response = await fetch(`backend/api/User/getCurrentUserId`, {
             method: 'GET',
             headers: {
                 Cookie: cookies().toString() 
@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
         console.log("User: ", user);
     } catch (error) {
         console.error("Error fetching current user:", error);
-        return null; // Handle error appropriately
+       
     } 
     
     if (!user && request.nextUrl.pathname === '/') {
