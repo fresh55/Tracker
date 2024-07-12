@@ -6,9 +6,10 @@ const Header = () => {
 
         <div className="w-full">
 
-            <div className="border-b-[1px] py-5 shadow-sm" >
+            <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 mt-4" >
+                <div className="flex-1  pl-5 text-lg font-medium">Welcome, John Doe</div>
                 <Container>
-                    <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
+                    <div className="flex flex-row items-center justify-between gap-3 md:gap-0 ">
                         
                     </div>
                 </Container>
