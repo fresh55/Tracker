@@ -6,29 +6,40 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Backend.src.Infrastructure.Data;
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<Balance> Balances => Set<Balance>();
+    public DbSet<Expense> Expenses => Set<Expense>();
+    public DbSet<Income> Incomes => Set<Income>();
+    public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-        public DbSet<Invoice> Invoices => Set<Invoice>();
-         public DbSet<Balance> Balances => Set<Balance>();
-        public DbSet<Expense> Expenses => Set<Expense>();
-       public DbSet<Income> Incomes => Set<Income>();
-       public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        builder.Entity<Balance>(b =>
         {
-            base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-                builder.Entity<Balance>()
-               .HasMany(b => b.Incomes)
-               .WithOne(i => i.Balance)
-               .HasForeignKey(i => i.BalanceId);
+            b.HasOne(balance => balance.ApplicationUser)
+             .WithOne(user => user.Balance)
+             .HasForeignKey<Balance>(balance => balance.ApplicationUserId)
+             .IsRequired();
+
+            b.HasMany(balance => balance.Incomes)
+             .WithOne(income => income.Balance)
+             .HasForeignKey(income => income.BalanceId);
+
+            b.HasMany(balance => balance.Expenses)
+             .WithOne(expense => expense.Balance)
+             .HasForeignKey(expense => expense.BalanceId);
+        });
 
         var decimalProps = builder.Model
-   .GetEntityTypes()
-   .SelectMany(t => t.GetProperties())
-   .Where(p => (System.Nullable.GetUnderlyingType(p.ClrType) ?? p.ClrType) == typeof(decimal));
+            .GetEntityTypes()
+            .SelectMany(t => t.GetProperties())
+            .Where(p => (System.Nullable.GetUnderlyingType(p.ClrType) ?? p.ClrType) == typeof(decimal));
 
         foreach (var property in decimalProps)
         {
@@ -36,6 +47,4 @@ namespace Backend.src.Infrastructure.Data;
             property.SetScale(2);
         }
     }
-
-    }
-
+}

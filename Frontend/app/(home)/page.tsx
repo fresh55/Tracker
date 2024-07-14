@@ -17,11 +17,11 @@ export default function Home() {
     const [balance, setBalance] = useState<BalanceDto>(new BalanceDto());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
+    const client = new Client();
     useEffect(() => {
-        const client = new Client();
+       
 
-        client.getBalance(2) // Assuming '1' is the id of the balance you want to fetch
+        client.getBalance(1) // Assuming '1' is the id of the balance you want to fetch
             .then(data => {
                 setBalance(data);
                 setLoading(false);

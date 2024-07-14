@@ -4,6 +4,7 @@ using Backend.src.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240713210934_AddApplicationUserIdToBalance")]
+    partial class AddApplicationUserIdToBalance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace Backend.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BalanceId")
+                    b.Property<int?>("BalanceId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -435,13 +438,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.src.Domain.Entities.Expense", b =>
                 {
-                    b.HasOne("Backend.src.Domain.Entities.Balance", "Balance")
+                    b.HasOne("Backend.src.Domain.Entities.Balance", null)
                         .WithMany("Expenses")
-                        .HasForeignKey("BalanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Balance");
+                        .HasForeignKey("BalanceId");
                 });
 
             modelBuilder.Entity("Backend.src.Domain.Entities.Income", b =>

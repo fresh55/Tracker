@@ -7,6 +7,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Diagnostics;
+using Backend.src.Infrastructure.Data;  
+
 
 namespace Backend.src.Infrastructure.Identity
 {
@@ -14,42 +16,23 @@ namespace Backend.src.Infrastructure.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IUser _currentUser;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationDbContext _context;
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-            IAuthorizationService authorizationService,
-            IUser currentUser,
-            IHttpContextAccessor httpContextAccessor) // Removed ITokenService
+            IHttpContextAccessor httpContextAccessor,
+            ApplicationDbContext context
+            ) 
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-            _authorizationService = authorizationService;
-            _currentUser = currentUser;
-            _httpContextAccessor = httpContextAccessor; // Initialize IHttpContextAccessor
+            _httpContextAccessor = httpContextAccessor;
+            _context = context;
         }
 
-        public async Task<bool> AuthorizeAsync(string userId, string policyName)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-            var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-            return result.Succeeded;
-        }
+ 
 
 
         public async Task<string> GetUserIdAsync(ClaimsPrincipal user)
@@ -64,17 +47,19 @@ namespace Backend.src.Infrastructure.Identity
             return user?.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<IdentityResult> CreateUserAsync(string email, string password)
         {
-            var user = new ApplicationUser
-            {
-                UserName = userName,
-                Email = userName,
-            };
-
+            var user = new ApplicationUser { UserName = email, Email = email };
             var result = await _userManager.CreateAsync(user, password);
 
-            return (result.ToApplicationResult(), user.Id);
+            if (result.Succeeded)
+            {
+              
+                user.Balance = new Balance { ApplicationUserId = user.Id };
+                await _context.SaveChangesAsync();
+            }
+
+            return result;
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -96,20 +81,16 @@ namespace Backend.src.Infrastructure.Identity
             var userPrincipal = _httpContextAccessor.HttpContext?.User;
             if (userPrincipal == null)
             {
-                Console.WriteLine("User principal is null");
                 return null;
             }
 
             var userId = userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
-                Console.WriteLine("User ID is null");
                 return null;
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            
-            return user;
+            return await _userManager.FindByIdAsync(userId);
         }
     }
 }

@@ -1,13 +1,15 @@
-﻿namespace Backend.src.Domain.Entities
+﻿using Backend.src.Infrastructure.Identity;
+namespace Backend.src.Domain.Entities
 {
     public class Balance : BaseEntity   
     {
         public decimal TotalAmount { get; set; }
         public List<Expense> Expenses { get; set; }
         public List<Income> Incomes { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
-
-     public Balance()
+        public Balance()
         {
             TotalAmount = 0;
             Expenses = new List<Expense>();

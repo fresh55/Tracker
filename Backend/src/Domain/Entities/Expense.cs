@@ -5,7 +5,8 @@
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-
+        public int BalanceId { get; set; }
+        public Balance Balance { get; set; }
         public Expense(decimal amount, string description, DateTime date)
         {
             if (amount <= 0)

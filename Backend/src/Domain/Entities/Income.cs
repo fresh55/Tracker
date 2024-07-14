@@ -9,9 +9,8 @@ namespace Backend.src.Domain.Entities
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public int BalanceId { get; set; }
-        [JsonIgnore]
-        public Balance Balance { get; set; }  // Add this property
-         public Income(decimal amount, string description, DateTime date)
+        public Balance Balance { get; set; }
+        public Income(decimal amount, string description, DateTime date)
         {
             if (amount <= 0)
                 throw new ArgumentException("Amount must be greater than zero.");

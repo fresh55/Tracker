@@ -1,21 +1,32 @@
-﻿import Container from "./Container";
+﻿import React from 'react';
+import { User } from 'lucide-react';
+import  Container  from '@/components/Container'; 
+import { Skeleton } from '@/components/ui/skeleton';
+import { ApplicationUser } from '@/lib/clientApi';
 
-
-const Header = () => {
-    return (
-
-        <div className="w-full">
-
-            <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 mt-4" >
-                <div className="flex-1  pl-5 text-lg font-medium">Welcome, John Doe</div>
-                <Container>
-                    <div className="flex flex-row items-center justify-between gap-3 md:gap-0 ">
-                        
-                    </div>
-                </Container>
-            </div>
-        </div>
-    )
+interface HeaderProps {
+    currentUser: ApplicationUser | null;
 }
 
-export default Header
+const Header: React.FC<HeaderProps> = ({ currentUser }) => {
+    return (
+        <header className="w-full mt-8">
+            <Container>
+                <div className="flex items-center justify-between py-4">
+                   
+                    <div className="flex items-center space-x-4">
+                        {currentUser ? (
+                            <div className="flex items-center space-x-2">
+                                <span className="text-lg font-medium">Welcome, {currentUser.email}</span>
+                            </div>
+                        ) : (
+                            <Skeleton className="h-8 w-32" />
+                        )}
+                    </div>
+                </div>
+            </Container>
+        </header>
+    );
+};
+
+export default Header;

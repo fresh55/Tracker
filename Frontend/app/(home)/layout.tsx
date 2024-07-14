@@ -1,12 +1,31 @@
-﻿
+﻿'use client'
+
 import Header from "@/components/Header";
-import { Button } from "../../components/ui/button";
 import { SidebarDashboard } from "../../components/SideBarNavigation";
-export default function homeLayout({
+import { Client, ApplicationUser } from '@/lib/clientApi';
+import { useEffect, useState } from "react";
+
+const client = new Client();
+export default function HomeLayout({
     children, // will be a page or nested layout
 }: {
     children: React.ReactNode;
-}) {
+    }) {
+    const [currentUser, setCurrentUser] = useState<ApplicationUser | null>(null);
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            try {
+                const user = await client.getCurrentUser();
+                setCurrentUser(user);
+            } catch (error) {
+                console.error("Error fetching current user:", error);
+            }
+        };
+
+        fetchCurrentUser();
+    }, []);
+
     return (
 
 
@@ -21,7 +40,7 @@ export default function homeLayout({
                     
                 </aside>
                 <div className="flex flex-1 flex-col w-full">
-                <Header />
+                    <Header currentUser={currentUser} />
                 <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-12 lg:p-12">
                     {children}
                     </main>
