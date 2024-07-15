@@ -3,7 +3,7 @@ using Backend.src.Application.Common.Interfaces;
 
 namespace Backend.src.Application.Balances2.Queries.GetBalance;
 
-public record GetBalance(int Id) : IRequest<BalanceDto>;
+public record GetBalance(string UserId) : IRequest<BalanceDto>;
 
 public class GetBalanceHandler : IRequestHandler<GetBalance, BalanceDto>
 {
@@ -22,7 +22,7 @@ public class GetBalanceHandler : IRequestHandler<GetBalance, BalanceDto>
           .Include(b => b.Incomes)
           .Include(b => b.Expenses)
           .AsSplitQuery() // Use split query for this specific query
-          .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken);
+          .FirstOrDefaultAsync(b => b.ApplicationUserId == request.UserId, cancellationToken);
 
         if (balance == null)
         {

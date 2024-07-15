@@ -1,19 +1,18 @@
-﻿import React from 'react';
+﻿'use client'
+
+import React from 'react';
 import { User } from 'lucide-react';
-import  Container  from '@/components/Container'; 
+import Container from '@/components/Container';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ApplicationUser } from '@/lib/clientApi';
+import { useUser } from '@/context/UserContext';
 
-interface HeaderProps {
-    currentUser: ApplicationUser | null;
-}
+const Header: React.FC = () => {
+    const { currentUser } = useUser();
 
-const Header: React.FC<HeaderProps> = ({ currentUser }) => {
     return (
         <header className="w-full mt-8">
             <Container>
                 <div className="flex items-center justify-between py-4">
-                   
                     <div className="flex items-center space-x-4">
                         {currentUser ? (
                             <div className="flex items-center space-x-2">

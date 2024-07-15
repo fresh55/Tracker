@@ -11,30 +11,38 @@ import {
 import  { Client, BalanceDto  } from '@/lib/clientApi';
 import { useEffect, useState } from "react";
 import TransactionsPage from "./components/Invoices"; 
-
+import { useUser } from '@/context/UserContext';
 
 export default function Home() {
     const [balance, setBalance] = useState<BalanceDto>(new BalanceDto());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const client = new Client();
+    const { currentUser } = useUser();
+
     useEffect(() => {
-       
+        if (currentUser) {
+            console.log('Fetching balance for user:', currentUser.id);
+            client.getBalance(currentUser.id)
+                .then(data => {
+                    setBalance(data);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error('Error fetching balance:', err);
+                    setError('Error fetching balance');
+                    setLoading(false);
+                });
+        }
+    }, [currentUser]);
 
-        client.getBalance(1) // Assuming '1' is the id of the balance you want to fetch
-            .then(data => {
-                setBalance(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching balance:', err);
-                setError('Error fetching balance');
-                setLoading(false);
-            });
-    }, []);
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-
-
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
    
     
   

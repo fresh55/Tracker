@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System.Reflection;
+using Backend.src.Application.Common.Behaviours;
 
 namespace Backend.src.Application;
 
@@ -14,6 +15,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
         });
 

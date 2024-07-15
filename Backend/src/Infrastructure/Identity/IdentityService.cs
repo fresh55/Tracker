@@ -47,20 +47,6 @@ namespace Backend.src.Infrastructure.Identity
             return user?.UserName;
         }
 
-        public async Task<IdentityResult> CreateUserAsync(string email, string password)
-        {
-            var user = new ApplicationUser { UserName = email, Email = email };
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
-            {
-              
-                user.Balance = new Balance { ApplicationUserId = user.Id };
-                await _context.SaveChangesAsync();
-            }
-
-            return result;
-        }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
         {

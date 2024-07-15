@@ -9,7 +9,7 @@ namespace Backend.src.Application.Common.Interfaces;
     {
         Task<string> GetUserNameAsync(string userId);
         Task<bool> IsInRoleAsync(string userId, string role);
-    Task<IdentityResult> CreateUserAsync(string email, string password);
+ 
         Task<string> GetUserIdAsync(ClaimsPrincipal user);
 
         Task<ApplicationUser> GetCurrentUserAsync();

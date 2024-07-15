@@ -15,7 +15,7 @@ public class Balance : EndpointGroupBase
             .MapPost(CreateBalance)
             .MapPost(AddIncome, "/addIncome")
             .MapPost(AddExpense, "/addExpense")
-            .MapGet(GetBalance, "{id}")
+            .MapGet(GetBalance, "{UserId}")
             .MapGet(GetTotalIncome, "/getIncome/{id}")
             .MapGet(GetTransactions, "/getTransactions/{id}");  
             
@@ -36,9 +36,9 @@ public class Balance : EndpointGroupBase
     {
         return sender.Send(command);
     }
-    public async Task<BalanceDto> GetBalance(ISender sender, int id)
+    public async Task<BalanceDto> GetBalance(ISender sender, string UserId)
     {
-        return await sender.Send(new GetBalance(id));
+        return await sender.Send(new GetBalance(UserId));
     }
 
     public  async Task<List<IncomeDto>> GetTotalIncome(ISender sender, int id)

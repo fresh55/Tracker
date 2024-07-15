@@ -1,7 +1,9 @@
 ﻿using Backend.src.Infrastructure.Identity;
 using Backend.src.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Backend.src.Application.Users.Commands.RegisterUser;
 namespace Backend.src.Web.Endpoints;
+
 
 public class User : EndpointGroupBase
 {
@@ -10,6 +12,7 @@ public class User : EndpointGroupBase
         app.MapGroup(this)
             .MapGet(GetUserNameAsync, "/getUserName/{userId}")
             .MapGet(GetCurrentUserAsync, "/getCurrentUserId")
+            .MapPost(RegisterUser, "/CreateUser")
             .MapIdentityApi<ApplicationUser>();
         
     }
@@ -27,5 +30,17 @@ public class User : EndpointGroupBase
         var user = await identityService.GetCurrentUserAsync();
         return user;
     }
+    private static async Task<IResult> RegisterUser(ISender sender, RegisterUserCommand command)
+    {
+        var result = await sender.Send(command);
+
+        if (result.Succeeded)
+        {
+            return Results.Ok("User registered successfully");
+        }
+
+        return Results.BadRequest(result.Errors);
+    }
+
 
 }

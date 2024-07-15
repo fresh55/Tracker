@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Client, RegisterRequest } from "@/lib/clientApi";
+import { Client } from "@/lib/clientApi";
 import { useRouter } from "next/navigation";
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -43,12 +43,12 @@ const RegisterForm = () => {
           setServerMessage(null); // Clear previous server messages
           console.log(data); console.log(data);
           try {
-              const registerRequest = new RegisterRequest();
-              registerRequest.email = data.email;
-              registerRequest.password = data.password;
+              const registerRequest: RegisterRequest = {
+                  email: data.email,
+                  password: data.password
+              };
 
-
-              const response = await client.postApiUserRegister(registerRequest)
+              const response = await client.registerUser(registerRequest)
               console.log(response);
               router.push('/')
           } catch (error) {
