@@ -34,7 +34,7 @@ public static class DependencyInjection
         services.AddRazorPages();
         services.AddControllers().AddJsonOptions(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.MaxDepth = 64; // Optional, set a custom depth if needed
         });
         // Customise default API behaviour

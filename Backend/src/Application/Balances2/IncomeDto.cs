@@ -13,7 +13,7 @@ public class IncomeDto
     {
         public Mapping()
         {
-            CreateMap<Balance, IncomeDto>();
+            CreateMap<Income, IncomeDto>();
         }
     }
 }

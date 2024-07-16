@@ -27,12 +27,12 @@ public class Balance : EndpointGroupBase
         return sender.Send(command);
     }
 
-    public Task<Income> AddIncome(ISender sender, AddIncomeCommand command)
+    public Task<IncomeDto> AddIncome(ISender sender, AddIncomeCommand command)
     {
         return sender.Send(command);
     }
 
-    public Task<Expense> AddExpense(ISender sender, AddExpenseCommand command)
+    public Task<ExpenseDto> AddExpense(ISender sender, AddExpenseCommand command)
     {
         return sender.Send(command);
     }

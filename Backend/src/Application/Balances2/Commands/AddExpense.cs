@@ -5,27 +5,31 @@ using Backend.src.Application.Balances2;
 
 namespace Backend.src.Application.Balances2.Commands.AddExpense;
 
-public record AddExpenseCommand : IRequest<Expense>
+public record AddExpenseCommand : IRequest<ExpenseDto>
 {
     public decimal Amount { get; init; }
     public DateTime DateAdded { get; set; }
     public string Description { get; set; }
-    public int BalanceId { get; init; }
+    public string UserId { get; init; }
 
 }
 
-public class AddExpenseCommandHandler : IRequestHandler<AddExpenseCommand, Expense>
+public class AddExpenseCommandHandler : IRequestHandler<AddExpenseCommand, ExpenseDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public AddExpenseCommandHandler(IApplicationDbContext context)
+
+    public AddExpenseCommandHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<Expense> Handle(AddExpenseCommand request, CancellationToken cancellationToken)
+    public async Task<ExpenseDto> Handle(AddExpenseCommand request, CancellationToken cancellationToken)
     {
-        var balance = await _context.Balances.FirstOrDefaultAsync(b => b.Id == request.BalanceId, cancellationToken);
+        var balance = await _context.Balances
+       .FirstOrDefaultAsync(b => b.ApplicationUserId == request.UserId, cancellationToken);
         if (balance == null)
         {
             throw new Exception("Balance not found");
@@ -35,7 +39,7 @@ public class AddExpenseCommandHandler : IRequestHandler<AddExpenseCommand, Expen
         balance.AddExpense(expense);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return expense;
+        return _mapper.Map<ExpenseDto>(expense);
 
     }
 }
