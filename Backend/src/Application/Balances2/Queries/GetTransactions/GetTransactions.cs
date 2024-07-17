@@ -1,7 +1,7 @@
 ﻿using Backend.src.Application.Common.Interfaces;
 namespace Backend.src.Application.Balances2.Queries.GetTransactions;
 
-    public record GetTransactions(int BalanceId) : IRequest<List<TransactionDto>>;
+    public record GetTransactions(string UserId) : IRequest<List<TransactionDto>>;
 
 public class GetTransactionsHandler : IRequestHandler<GetTransactions, List<TransactionDto>>
 {
@@ -20,11 +20,11 @@ public class GetTransactionsHandler : IRequestHandler<GetTransactions, List<Tran
         var balance = await _context.Balances
                 .Include(b => b.Expenses)
                 .Include(b => b.Incomes)
-                .FirstOrDefaultAsync(b => b.Id == request.BalanceId);
+                .FirstOrDefaultAsync(b => b.ApplicationUserId == request.UserId);
 
         if (balance == null)
         {
-            throw new NotFoundException(nameof(Balance), request.BalanceId.ToString());
+            throw new NotFoundException(nameof(Balance), request.UserId.ToString());
         }
 
         var transactions = new List<TransactionDto>();

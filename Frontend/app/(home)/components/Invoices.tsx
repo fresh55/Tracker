@@ -31,16 +31,19 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useUser } from '../../../context/UserContext';
+
 
 const TransactionsPage = () => {
     const [transactions, setTransactions] = useState<TransactionDto[]>([]);
     const [open, setOpen] = useState(false);
+    const { currentUser } = useUser();
 
     useEffect(() => {
         const fetchTransactions = async () => {
             const client = new Client();
             try {
-                const data = await client.getTransactions(2);
+                const data = await client.getTransactions(currentUser?.id);
                 setTransactions(data);
             } catch (error) {
                 console.error("Failed to fetch transactions:", error);
