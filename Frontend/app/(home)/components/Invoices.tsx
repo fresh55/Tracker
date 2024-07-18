@@ -32,26 +32,46 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useUser } from '../../../context/UserContext';
+import TransactionForm from './TransactionForm'; 
+import { revalidateTag } from 'next/cache';
 
 
+import { fetchTransactions, addTransaction } from '../../actions/actions';
+import { useTransition } from 'react';
+interface Transaction {
+    amount: number;
+    dateAdded: string;
+    type: string;
+    description: string;
+}
 const TransactionsPage = () => {
     const [transactions, setTransactions] = useState<TransactionDto[]>([]);
-    const [open, setOpen] = useState(false);
+    const [isPending, startTransition] = useTransition();
+    
     const { currentUser } = useUser();
 
     useEffect(() => {
-        const fetchTransactions = async () => {
-            const client = new Client();
-            try {
-                const data = await client.getTransactions(currentUser?.id);
+        if (currentUser?.id) {
+            startTransition(async () => {
+                const data = await fetchTransactions(currentUser.id);
                 setTransactions(data);
-            } catch (error) {
-                console.error("Failed to fetch transactions:", error);
-            }
-        };
+            });
+        }
+    }, [currentUser]);
 
-        fetchTransactions();
-    }, []);
+    const handleTransactionAdded = async (data: any) => {
+        const result = await addTransaction(data);
+        if (result.success) {
+            startTransition(async () => {
+                const updatedData = await fetchTransactions(currentUser!.id);
+                setTransactions(updatedData);
+            });
+        } else {
+            console.error(result.error);
+        }
+    };
+
+
 
     if (transactions.length === 0) {
         return (
@@ -81,7 +101,7 @@ const TransactionsPage = () => {
                                 <Button> Add new transaction </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-md">
-                            
+                                <TransactionForm onTransactionAdded={handleTransactionAdded} />
                             </DialogContent>
                         </Dialog>
                     </div>
@@ -102,7 +122,7 @@ const TransactionsPage = () => {
                                     <TableCell> {transaction.dateAdded ? new Date(transaction.dateAdded).toDateString() : 'N/A'}</TableCell>
                                     <TableCell className="text-right">{transaction.amount}</TableCell>
                                     <TableCell className="text-right">
-                                        <Dialog open={open} onOpenChange={setOpen}>
+                                        <Dialog >
                                             <DialogTrigger asChild>
                                                 <Button size="sm" variant="outline">Edit</Button>
                                             </DialogTrigger>

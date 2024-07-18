@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import TransactionsPage from "./components/Invoices"; 
 import { useUser } from '@/context/UserContext';
 
+
+
 export default function Home() {
     const [balance, setBalance] = useState<BalanceDto>(new BalanceDto());
     const [loading, setLoading] = useState(true);
@@ -95,7 +97,7 @@ export default function Home() {
                 </Card>
 </div>
         
-            <TransactionsPage/>
+            <TransactionsPage />
         </>
        
     );
