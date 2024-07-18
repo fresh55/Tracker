@@ -44,16 +44,16 @@ interface Transaction {
     type: string;
     description: string;
 }
-const TransactionsPage = () => {
+const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => void }) => {
     const [transactions, setTransactions] = useState<TransactionDto[]>([]);
     const [isPending, startTransition] = useTransition();
-    
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { currentUser } = useUser();
 
     useEffect(() => {
         if (currentUser?.id) {
             startTransition(async () => {
-                const data = await fetchTransactions(currentUser.id);
+                const data = await fetchTransactions(currentUser.id as string);
                 setTransactions(data);
             });
         }
@@ -62,16 +62,16 @@ const TransactionsPage = () => {
     const handleTransactionAdded = async (data: any) => {
         const result = await addTransaction(data);
         if (result.success) {
+            setIsDialogOpen(false);
             startTransition(async () => {
                 const updatedData = await fetchTransactions(currentUser!.id);
                 setTransactions(updatedData);
+                onTransactionAdded();
             });
         } else {
             console.error(result.error);
         }
     };
-
-
 
     if (transactions.length === 0) {
         return (
@@ -96,7 +96,7 @@ const TransactionsPage = () => {
                     <CardTitle>History</CardTitle>
                     <CardDescription>Recent expenses and transactions</CardDescription>
                     <div className="flex justify-end">
-                        <Dialog>
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button> Add new transaction </Button>
                             </DialogTrigger>
@@ -119,7 +119,7 @@ const TransactionsPage = () => {
                             {transactions.map(transaction => (
                                 <TableRow key={transaction.type}>
                                     <TableCell className="font-bold">{transaction.type}</TableCell>
-                                    <TableCell> {transaction.dateAdded ? new Date(transaction.dateAdded).toDateString() : 'N/A'}</TableCell>
+                                    <TableCell>{transaction.dateAdded ? new Date(transaction.dateAdded).toLocaleDateString() : 'N/A'}</TableCell>
                                     <TableCell className="text-right">{transaction.amount}</TableCell>
                                     <TableCell className="text-right">
                                         <Dialog >

@@ -32,7 +32,8 @@ public class GetTransactionsHandler : IRequestHandler<GetTransactions, List<Tran
         transactions.AddRange(_mapper.Map<List<TransactionDto>>(balance.Expenses));
         transactions.AddRange(_mapper.Map<List<TransactionDto>>(balance.Incomes));
 
-        return transactions;
+        // Sort the transactions by date in descending order (most recent first)
+        return transactions.OrderByDescending(t => t.DateAdded).ToList();
     }
 
 }

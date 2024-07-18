@@ -19,7 +19,7 @@ export class Client {
         if (typeof window !== 'undefined') {
             this.http = http ? http : window as any;
         } else {
-            this.http = http ? http : globalThis as any; 
+            this.http = http ? http : globalThis as any;
         }
         this.baseUrl = baseUrl ?? "http://localhost:5093";
 
@@ -1205,7 +1205,9 @@ export interface IAddExpenseCommand {
 }
 
 export class TransactionDto implements ITransactionDto {
+    id?: number;
     amount?: number;
+    description?: string;
     dateAdded?: Date;
     type?: string;
 
@@ -1220,7 +1222,9 @@ export class TransactionDto implements ITransactionDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.amount = _data["amount"];
+            this.description = _data["description"];
             this.dateAdded = _data["dateAdded"] ? new Date(_data["dateAdded"].toString()) : <any>undefined;
             this.type = _data["type"];
         }
@@ -1235,7 +1239,9 @@ export class TransactionDto implements ITransactionDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["amount"] = this.amount;
+        data["description"] = this.description;
         data["dateAdded"] = this.dateAdded ? this.dateAdded.toISOString() : <any>undefined;
         data["type"] = this.type;
         return data;
@@ -1243,7 +1249,9 @@ export class TransactionDto implements ITransactionDto {
 }
 
 export interface ITransactionDto {
+    id?: number;
     amount?: number;
+    description?: string;
     dateAdded?: Date;
     type?: string;
 }

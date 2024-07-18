@@ -3,11 +3,11 @@
 import {Loader2} from "lucide-react";
 import {FieldValues, SubmitHandler, useForm}
 from "react-hook-form";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Client } from "@/lib/clientApi";
+import { Client, RegisterUserCommand } from '@/lib/clientApi';
 import { useRouter } from "next/navigation";
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,39 +25,45 @@ const RegisterForm = () => {
     const [isLoading,setIsLoading] = useState(false);
     const [serverMessage, setServerMessage] = useState<string | null>(null);
     const router = useRouter();
+    const client = new Client(); // Create a Client instance
     const { 
         register, 
         handleSubmit,
+
         formState: {
           errors
         },
+        setError
+
     } = useForm<FieldValues>(
         {
             resolver: zodResolver(UserSchema)
             }        );
    
 
-      const onSubmit: SubmitHandler<FieldValues> = async(data) => {
-          const client = new Client();
-          setIsLoading(true);
-          setServerMessage(null); // Clear previous server messages
-          console.log(data); console.log(data);
-          try {
-              const registerRequest: RegisterRequest = {
-                  email: data.email,
-                  password: data.password
-              };
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        console.log(data);
+        setIsLoading(true);
+        try {
+            const registerCommand = new RegisterUserCommand({
+                email: data.email,
+                password: data.password
+            });
 
-              const response = await client.registerUser(registerRequest)
-              console.log(response);
-              router.push('/')
-          } catch (error) {
-              console.error("Failed to login:", error);
-              setServerMessage("Failed to login");
-          }
-          setIsLoading(false);
+            await client.registerUser(registerCommand);
 
-      }
+            console.log("Registration successful");
+            router.push('/login');
+        } catch (error) {
+            console.error("Registration failed:", error);
+            setError("root.serverError", {
+                type: "server",
+                message: "Registration failed. Please try again."
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
     
       
       return (

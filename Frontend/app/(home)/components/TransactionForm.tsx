@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Client, AddIncomeCommand, AddExpenseCommand } from '@/lib/clientApi';
@@ -20,13 +20,14 @@ const transactionSchema = z.object({
 type TransactionFormData = z.infer<typeof transactionSchema>;
 
 const TransactionForm = ({ onTransactionAdded }: { onTransactionAdded: (data: any) => Promise<void> }) => {
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<TransactionFormData>({
+    const { register, handleSubmit, control, formState: { errors, isSubmitting }, reset } = useForm<TransactionFormData>({
         resolver: zodResolver(transactionSchema),
     });
     const [submitError, setSubmitError] = useState<string | null>(null);
     const { currentUser } = useUser();
 
     const onSubmit: SubmitHandler<TransactionFormData> = async (data) => {
+        console.log('Transaction data:', data);
         if (!currentUser) {
             setSubmitError("User not authenticated");
             return;
@@ -36,8 +37,8 @@ const TransactionForm = ({ onTransactionAdded }: { onTransactionAdded: (data: an
             await onTransactionAdded({
                 amount: data.amount,
                 dateAdded: new Date(data.dateAdded),
-                description: data.description,
                 userId: currentUser.id,
+                description: data.description,
                 type: data.type
             });
             reset();
@@ -58,16 +59,26 @@ const TransactionForm = ({ onTransactionAdded }: { onTransactionAdded: (data: an
                 <CardContent className="space-y-4">
                     <div className="grid gap-2">
                         <Label htmlFor="type">Transaction Type</Label>
-                        <RadioGroup defaultValue="income" className="flex">
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="income" id="income" {...register("type")} />
-                                <Label htmlFor="income">Income</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="expense" id="expense" {...register("type")} />
-                                <Label htmlFor="expense">Expense</Label>
-                            </div>
-                        </RadioGroup>
+                        <Controller
+                            name="type"
+                            control={control}
+                            render={({ field }) => (
+                                <RadioGroup
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                    className="flex"
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="income" id="income" />
+                                        <Label htmlFor="income">Income</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="expense" id="expense" />
+                                        <Label htmlFor="expense">Expense</Label>
+                                    </div>
+                                </RadioGroup>
+                            )}
+                        />
                         {errors.type && <p className="text-red-500">{errors.type.message}</p>}
                     </div>
                     <div className="grid gap-2">

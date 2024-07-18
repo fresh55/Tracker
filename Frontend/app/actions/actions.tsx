@@ -1,16 +1,21 @@
 'use server'
+import { Client, TransactionDto, AddIncomeCommand, AddExpenseCommand } from '@/lib/clientApi';
+import { revalidatePath } from 'next/cache';
 
-import { Client } from '@/lib/clientApi';
 
-export async function fetchTransactions(userId: string) {
+export async function fetchTransactions(userId: string | undefined): Promise<any[]> {
+    if (!userId) {
+        throw new Error("User ID is required");
+    }
     const client = new Client();
     try {
         const data = await client.getTransactions(userId);
         return data.map(transaction => ({
             amount: transaction.amount,
-            dateAdded: transaction.dateAdded?.toISOString(),
+            dateAdded: transaction.dateAdded ? transaction.dateAdded.toISOString() : null,
             type: transaction.type,
-            description: transaction.amount
+            id: transaction.id,
+            description: transaction.description
         }));
     } catch (error) {
         console.error("Failed to fetch transactions:", error);
@@ -21,14 +26,31 @@ export async function fetchTransactions(userId: string) {
 export async function addTransaction(data: any) {
     const client = new Client();
     try {
+        const baseTransactionData = {
+            amount: data.amount,
+            dateAdded: new Date(data.dateAdded),
+            description: data.description,
+            userId: data.userId
+        };
+
+        let result;
         if (data.type === 'income') {
-            await client.addIncome(data);
+            const incomeCommand = new AddIncomeCommand(baseTransactionData);
+            result = await client.addIncome(incomeCommand);
         } else {
-            await client.addExpense(data);
+            const expenseCommand = new AddExpenseCommand(baseTransactionData);
+            result = await client.addExpense(expenseCommand);
         }
-        return { success: true };
+
+        // Immediately fetch updated transactions after adding a new one
+        const updatedTransactions = await client.getTransactions(data.userId);
+
+        return {
+            success: true,
+            data: updatedTransactions
+        };
     } catch (error) {
         console.error("Failed to add transaction:", error);
-        return { success: false, error: "Failed to add transaction" };
+        return { success: false, error: "Failed to add transaction", details: error };
     }
 }
