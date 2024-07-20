@@ -75,27 +75,24 @@ export const ShinyNavLink: React.FC<{ item: NavItem; isActive: boolean }> = ({ i
                     </span>
                 )}
             </span>
-            <span className="relative z-10 ml-auto text-xs font-semibold text-yellow-600">Premium</span>
+            <span className="relative z-20 ml-auto text-xs font-semibold text-yellow-600">Premium</span>
             {isHovered && (
                 <motion.div
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2"
-                    initial={{ opacity: 0, pathLength: 0 }}
-                    animate={{ opacity: 1, pathLength: 1 }}
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
                     <motion.svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 220 220"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <motion.path
-                            d="M220,98.865c0-12.728-10.355-23.083-23.083-23.083s-23.083,10.355-23.083,23.083c0,5.79,2.148,11.084,5.681,15.14l-23.862,21.89L125.22,73.002l17.787-20.892l-32.882-38.623L77.244,52.111l16.995,19.962l-30.216,63.464l-23.527-21.544c3.528-4.055,5.671-9.344,5.671-15.128c0-12.728-10.355-23.083-23.083-23.083C10.355,75.782,0,86.137,0,98.865c0,11.794,8.895,21.545,20.328,22.913l7.073,84.735H192.6l7.073-84.735C211.105,120.41,220,110.659,220,98.865z"
-                            stroke="#F59E0B"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                            d="M21.2501 3C21.4925 3 21.7176 3.11688 21.8574 3.30983L21.9119 3.39706L25.9186 10.9098L25.9615 11.0122L25.9731 11.05L25.9901 11.1273L25.9994 11.2153L25.9973 11.3147L26.0001 11.25C26.0001 11.3551 25.9785 11.4552 25.9394 11.5461L25.9106 11.6057L25.87 11.6723L25.8173 11.7408L14.6 24.7047C14.4999 24.8391 14.3628 24.9277 14.2139 24.9703L14.1559 24.9844L14.0585 24.9979L13.9999 25L13.8993 24.9932L13.8142 24.9771L13.7109 24.9432L13.6852 24.931C13.5949 24.8911 13.5119 24.8316 13.4425 24.7535L2.17081 11.7263L2.1087 11.6387L2.06079 11.5456L2.02611 11.4463L2.00297 11.3152L2.00269 11.1878L2.01755 11.0891L2.02714 11.0499L2.06104 10.9538L2.08838 10.8971L6.08838 3.39706C6.20243 3.18321 6.41149 3.0396 6.64753 3.00704L6.75014 3H21.2501ZM17.9061 12H10.0911L14.0011 22.16L17.9061 12ZM8.48514 12H4.38914L11.7621 20.518L8.48514 12ZM23.6081 12H19.5151L16.2421 20.511L23.6081 12ZM10.0241 4.499H7.19914L3.99814 10.5H8.42314L10.0241 4.499ZM16.4231 4.499H11.5761L9.97514 10.5H18.0231L16.4231 4.499ZM20.8001 4.499H17.9751L19.5761 10.5H23.9991L20.8001 4.499Z"
+                            fill="#F59E0B"
                             initial={{ pathLength: 0 }}
                             animate={{ pathLength: 1 }}
                             transition={{
