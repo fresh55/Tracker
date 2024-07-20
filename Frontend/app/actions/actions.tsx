@@ -42,15 +42,29 @@ export async function addTransaction(data: any) {
             result = await client.addExpense(expenseCommand);
         }
 
-        // Immediately fetch updated transactions after adding a new one
-        const updatedTransactions = await client.getTransactions(data.userId);
-
+        revalidatePath('/');
         return {
             success: true,
-            data: updatedTransactions
+            data: {
+                id: result.id,
+                amount: result.amount,
+                description: result.description,
+                date: result.date ? result.date.toISOString() : null
+            }
         };
     } catch (error) {
         console.error("Failed to add transaction:", error);
         return { success: false, error: "Failed to add transaction", details: error };
+    }
+}
+export async function deleteTransaction(id: number, userId: string, transactionType: string) {
+    const client = new Client();
+    try {
+        await client.deleteTransaction({ id, userId, transactionType });
+        revalidatePath('/');
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to delete transaction:", error);
+        return { success: false, error: "Failed to delete transaction", details: error };
     }
 }

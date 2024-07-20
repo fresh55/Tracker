@@ -1,7 +1,6 @@
 using MediatR;
 using Backend.src.Application.Common.Interfaces;
 using Backend.src.Domain.Entities;
-using Backend.src.Application.Balances2;
 
 namespace Backend.src.Application.Balances2.Commands.AddExpense;
 

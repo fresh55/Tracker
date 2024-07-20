@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "eslint": "^8.57.0",
+    "framer-motion": "^11.3.8",
     "http-proxy-middleware": "^3.0.0",
     "lucide": "^0.363.0",
     "lucide-react": "^0.396.0",

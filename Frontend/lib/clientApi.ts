@@ -25,7 +25,6 @@ export class Client {
 
     }
 
-
     createBalance(command: CreateBalanceCommand): Promise<BalanceDto> {
         let url_ = this.baseUrl + "/api/Balance";
         url_ = url_.replace(/[?&]$/, "");
@@ -265,6 +264,40 @@ export class Client {
         return Promise.resolve<TransactionDto[]>(null as any);
     }
 
+    deleteTransaction(command: DeleteTransactionCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/Balance/deleteTransaction";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteTransaction(_response);
+        });
+    }
+
+    protected processDeleteTransaction(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
     getAllInvoices(): Promise<InvoiceDto[]> {
         let url_ = this.baseUrl + "/api/Invoices";
         url_ = url_.replace(/[?&]$/, "");
@@ -455,7 +488,7 @@ export class Client {
             headers: {
                 "Accept": "application/json"
             },
-            credentials: "include", // Ensure credentials are included if needed
+            credentials: "include",
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
@@ -493,7 +526,7 @@ export class Client {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include", // Ensure credentials are included if needed
+            credentials: "include",
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
@@ -574,7 +607,7 @@ export class Client {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            credentials: "include", // Ensure credentials are included if needed
+            credentials: "include",
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
@@ -1210,6 +1243,7 @@ export class TransactionDto implements ITransactionDto {
     description?: string;
     dateAdded?: Date;
     type?: string;
+    dateAddedISO?: string;
 
     constructor(data?: ITransactionDto) {
         if (data) {
@@ -1227,6 +1261,7 @@ export class TransactionDto implements ITransactionDto {
             this.description = _data["description"];
             this.dateAdded = _data["dateAdded"] ? new Date(_data["dateAdded"].toString()) : <any>undefined;
             this.type = _data["type"];
+            this.dateAddedISO = _data["dateAddedISO"];
         }
     }
 
@@ -1244,6 +1279,7 @@ export class TransactionDto implements ITransactionDto {
         data["description"] = this.description;
         data["dateAdded"] = this.dateAdded ? this.dateAdded.toISOString() : <any>undefined;
         data["type"] = this.type;
+        data["dateAddedISO"] = this.dateAddedISO;
         return data;
     }
 }
@@ -1254,6 +1290,51 @@ export interface ITransactionDto {
     description?: string;
     dateAdded?: Date;
     type?: string;
+    dateAddedISO?: string;
+}
+
+export class DeleteTransactionCommand implements IDeleteTransactionCommand {
+    id?: number;
+    userId?: string;
+    transactionType?: string;
+
+    constructor(data?: IDeleteTransactionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userId = _data["userId"];
+            this.transactionType = _data["transactionType"];
+        }
+    }
+
+    static fromJS(data: any): DeleteTransactionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteTransactionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userId"] = this.userId;
+        data["transactionType"] = this.transactionType;
+        return data;
+    }
+}
+
+export interface IDeleteTransactionCommand {
+    id?: number;
+    userId?: string;
+    transactionType?: string;
 }
 
 export class InvoiceDto implements IInvoiceDto {

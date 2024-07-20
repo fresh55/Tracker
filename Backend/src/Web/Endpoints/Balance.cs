@@ -3,8 +3,10 @@ using Backend.src.Application.Balances2.Commands.CreateBalance;
 using  Backend.src.Application.Balances2.Commands.AddIncome;
 using Backend.src.Application.Balances2.Queries.GetBalance;
 using Backend.src.Application.Balances2.Queries.GetAllIncomes;
+
 using Backend.src.Application.Balances2.Commands.AddExpense;
 using Backend.src.Application.Balances2.Queries.GetTransactions;
+using Backend.src.Application.Balances2.Commands.DeleteTransaction;
 namespace Backend.src.Web.Endpoints;
 
 public class Balance : EndpointGroupBase
@@ -17,8 +19,9 @@ public class Balance : EndpointGroupBase
             .MapPost(AddExpense, "/addExpense")
             .MapGet(GetBalance, "{UserId}")
             .MapGet(GetTotalIncome, "/getIncome/{id}")
-            .MapGet(GetTransactions, "/getTransactions/{UserId}");  
-            
+            .MapGet(GetTransactions, "/getTransactions/{UserId}")
+            .MapPost(DeleteTransaction, "/deleteTransaction");
+
     }
 
     public Task<BalanceDto> CreateBalance(ISender sender, CreateBalanceCommand command)
@@ -36,6 +39,11 @@ public class Balance : EndpointGroupBase
     {
         return sender.Send(command);
     }
+    public async Task<IResult> DeleteTransaction(ISender sender, DeleteTransactionCommand command)
+    {
+        await sender.Send(command);
+        return Results.NoContent();
+    }
     public async Task<BalanceDto> GetBalance(ISender sender, string UserId)
     {
         return await sender.Send(new GetBalance(UserId));
@@ -49,7 +57,10 @@ public class Balance : EndpointGroupBase
     public async Task<List<TransactionDto>> GetTransactions(ISender sender, string UserId)
     {
         return await sender.Send(new GetTransactions(UserId));
+
     }
+
+ 
 
 
 }
