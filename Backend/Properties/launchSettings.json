@@ -5,7 +5,11 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Azure__ApiKey": "269649fed6d845aeab1d053eb42d5b62",
+        "Endpoint": "https://tracker.cognitiveservices.azure.com/",
+
+
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5093"

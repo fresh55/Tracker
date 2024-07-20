@@ -2,11 +2,9 @@
 using Backend.src.Infrastructure.Data;
 using Backend.src.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using Backend.src.Domain.Constants;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Backend.src.Infrastructure.Services;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -30,8 +28,18 @@ public static class DependencyInjection
 
  
         services.AddTransient<IIdentityService, IdentityService>();
-    
-        
+        services.AddSingleton<IComputerVisionClient>(sp =>
+        {
+            return new ComputerVisionClient(new ApiKeyServiceClientCredentials(configuration["AzureComputerVision:ApiKey"]))
+            {
+                Endpoint = configuration["AzureComputerVision:Endpoint"]
+            };
+        });
+
+     
+
+        services.AddScoped<IOcrService, OcrService>();
+
         return services;
     }
 }
