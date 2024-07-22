@@ -11,13 +11,6 @@
 
 Financial Tracker is full-stack application for finance management. Leveraging the power of OpenAI, app offers intelligent invoice analysis, making financial tracking smarter and more efficient.
 
-### 🤖 AI Invoice Analysis Demo
-
-![AI Invoice Analysis Demo](https://imgur.com/RJhKUuX.gif)
-
-This GIF showcases our AI-powered invoice analysis feature. System quickly scans and extracts key information from an invoice, automatically populating relevant fields and categorizing expenses. This smart automation streamlines data entry and enhances accuracy in financial tracking.
-
-
 ### 🚀 Key Features
 
 - 🤖 AI-Powered Invoice Analysis using OpenAI
@@ -25,6 +18,15 @@ This GIF showcases our AI-powered invoice analysis feature. System quickly scans
 - 📈 Automated Balance Management
 - 👤 Secure User Authentication
 - 🔄 Real-time Financial Updates
+
+
+### 🤖 AI Invoice Analysis Demo
+
+![AI Invoice Analysis Demo](https://imgur.com/RJhKUuX.gif)
+
+This GIF showcases our AI-powered invoice analysis feature. System quickly scans and extracts key information from an invoice, automatically populating relevant fields and categorizing expenses. This smart automation streamlines data entry and enhances accuracy in financial tracking.
+
+
 
 ## 🧠 AI-Powered Invoice Analysis
 
