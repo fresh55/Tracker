@@ -1,4 +1,4 @@
-# 🌟 Financial Tracker: Your AI-Powered Money Manager
+# 🌟 Financial Tracker: AI-Powered Money Manager
 
 ![Next.js](https://img.shields.io/badge/Next.js-14.2.4-black?style=for-the-badge&logo=next.js)
 ![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
@@ -9,7 +9,14 @@
 
 ## 📊 Track, Manage, and Analyze Your Finances with AI
 
-Financial Tracker is full-stack application for finance management. Leveraging the power of OpenAI, our app offers intelligent invoice analysis, making financial tracking smarter and more efficient.
+Financial Tracker is full-stack application for finance management. Leveraging the power of OpenAI, app offers intelligent invoice analysis, making financial tracking smarter and more efficient.
+
+### 🤖 AI Invoice Analysis Demo
+
+![AI Invoice Analysis Demo](https://imgur.com/RJhKUuX.gif)
+
+This GIF showcases our AI-powered invoice analysis feature. System quickly scans and extracts key information from an invoice, automatically populating relevant fields and categorizing expenses. This smart automation streamlines data entry and enhances accuracy in financial tracking.
+
 
 ### 🚀 Key Features
 
@@ -21,9 +28,9 @@ Financial Tracker is full-stack application for finance management. Leveraging t
 
 ## 🧠 AI-Powered Invoice Analysis
 
-Our standout feature utilizes OpenAI's GPT-4 model to analyze invoices:
+Feature that utilizes OpenAI's GPT-4 model to analyze invoices:
 
-- 📷 OCR technology extracts text from uploaded invoice images
+- 📷 AZURE OCR technology extracts text from uploaded invoice images
 - 🔍 AI interprets the extracted text to identify key information
 - 💡 Automatically extracts total amount, category, date, and generates a title
 - 🎯 High accuracy in categorization and data extraction
@@ -47,19 +54,6 @@ Our standout feature utilizes OpenAI's GPT-4 model to analyze invoices:
 - Docker support for easy deployment
 - Visual Studio for development
 - Git for version control
-
-## 🏗️ Architecture
-
-Our application follows a modern, scalable architecture:
-
-- 📦 CQRS for efficient data operations
-
-
-
-## 📸 Screenshots
-
-
-
 
 ## 🙏 Acknowledgements
 
