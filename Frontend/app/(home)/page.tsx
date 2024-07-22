@@ -45,66 +45,60 @@ export default function Home() {
 
     return (
         <>
-            {currentUser ? (
+            {currentUser && currentUser.email ? (
                 <div className="flex items-center space-x-2">
-                    <span className="text-lg font-medium">Welcome, {currentUser.email}</span>
+                    <span className="text-lg font-medium">Welcome, {currentUser.email.split('@')[0]}</span>
                 </div>
             ) : (
                 <Skeleton className="h-8 w-32" />
             )}
-            <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                <Card className="bg-gradient-to-r from-blue-500 to-blue-800 text-white">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Balance
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {isLoading ? (
-                            <Skeleton className="h-8 w-24 bg-white/20" />
-                        ) : (
-                            <div className="text-2xl font-bold">{formatCurrency(balance.totalAmount)}</div>
-                        )}
-                        <p className="text-xs text-white">
-                            +20.1% from last month
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Incomes
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {isLoading ? (
-                            <Skeleton className="h-8 w-24" />
-                        ) : (
-                            <div className="text-2xl font-bold">{formatCurrency(balance.totalIncomesAmount)}</div>
-                        )}
-                        <p className="text-xs text-muted-foreground">
-                            +20.1% from last month
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card >
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Expenses
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {isLoading ? (
-                            <Skeleton className="h-8 w-24" />
-                        ) : (
-                            <div className="text-2xl font-bold">{formatCurrency(balance.totalExpensesAmount)}</div>
-                        )}
-                        <p className="text-xs text-muted-foreground">
-                            +20.1% from last month
-                        </p>
-                    </CardContent>
-                </Card>
-            </div>
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+    <Card className="bg-white shadow-md">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Balance</CardTitle>
+        </CardHeader>
+        <CardContent>
+            {isLoading ? (
+                <Skeleton className="h-8 w-24" />
+            ) : (
+                <div className="text-2xl font-bold text-gray-800">{formatCurrency(balance.totalAmount)}</div>
+            )}
+            <p className="text-xs text-gray-500 mt-1">
+                +20.1% from last month
+            </p>
+        </CardContent>
+    </Card>
+    <Card className="bg-white shadow-md">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Incomes</CardTitle>
+        </CardHeader>
+        <CardContent>
+            {isLoading ? (
+                <Skeleton className="h-8 w-24" />
+            ) : (
+                <div className="text-2xl font-bold text-gray-800">{formatCurrency(balance.totalIncomesAmount)}</div>
+            )}
+            <p className="text-xs text-gray-500 mt-1">
+                +20.1% from last month
+            </p>
+        </CardContent>
+    </Card>
+    <Card className="bg-white shadow-md">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Expenses</CardTitle>
+        </CardHeader>
+        <CardContent>
+            {isLoading ? (
+                <Skeleton className="h-8 w-24" />
+            ) : (
+                <div className="text-2xl font-bold text-gray-800">{formatCurrency(balance.totalExpensesAmount)}</div>
+            )}
+            <p className="text-xs text-gray-500 mt-1">
+                +20.1% from last month
+            </p>
+        </CardContent>
+    </Card>
+</div>
             <TransactionsPage onTransactionAdded={handleTransactionAdded} />
         </>
     );

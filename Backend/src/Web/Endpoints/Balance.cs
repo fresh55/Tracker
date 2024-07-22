@@ -1,9 +1,7 @@
 using Backend.src.Application.Balances2;
-using Backend.src.Application.Balances2.Commands.CreateBalance;
 using  Backend.src.Application.Balances2.Commands.AddIncome;
 using Backend.src.Application.Balances2.Queries.GetBalance;
 using Backend.src.Application.Balances2.Queries.GetAllIncomes;
-
 using Backend.src.Application.Balances2.Commands.AddExpense;
 using Backend.src.Application.Balances2.Queries.GetTransactions;
 using Backend.src.Application.Balances2.Commands.DeleteTransaction;
@@ -14,7 +12,6 @@ public class Balance : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(CreateBalance)
             .MapPost(AddIncome, "/addIncome")
             .MapPost(AddExpense, "/addExpense")
             .MapGet(GetBalance, "{UserId}")
@@ -24,11 +21,6 @@ public class Balance : EndpointGroupBase
 
     }
 
-    public Task<BalanceDto> CreateBalance(ISender sender, CreateBalanceCommand command)
-    {
-
-        return sender.Send(command);
-    }
 
     public Task<IncomeDto> AddIncome(ISender sender, AddIncomeCommand command)
     {

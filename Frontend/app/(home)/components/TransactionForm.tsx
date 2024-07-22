@@ -12,8 +12,9 @@ import { useUser } from '@/context/UserContext';
 
 const transactionSchema = z.object({
     amount: z.number().positive({ message: "Amount must be positive" }),
-    dateAdded: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
-    description: z.string().min(1, { message: "Description is required" }),
+    date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
+    title: z.string().min(1, { message: "Title is required" }),
+    category: z.string().min(1, { message: "Category is required" }),
     type: z.enum(['income', 'expense'], { required_error: "Transaction type is required" }),
 });
 
@@ -25,29 +26,38 @@ const TransactionForm = ({ onTransactionAdded }: { onTransactionAdded: (data: an
     });
     const [submitError, setSubmitError] = useState<string | null>(null);
     const { currentUser } = useUser();
+const onSubmit: SubmitHandler<TransactionFormData> = async (data) => {
+    console.log('Transaction data:', data);
+    if (!currentUser) {
+        setSubmitError("User not authenticated");
+        return;
+    }
 
-    const onSubmit: SubmitHandler<TransactionFormData> = async (data) => {
-        console.log('Transaction data:', data);
-        if (!currentUser) {
-            setSubmitError("User not authenticated");
-            return;
-        }
+    const client = new Client();
+    try {
+        const baseTransactionData = {
+            amount: data.amount,
+            dateAdded: new Date(data.date), // Convert string to Date object
+            userId: currentUser.id,
+            title: data.title,
+            category: data.category
+        };
 
-        try {
-            await onTransactionAdded({
-                amount: data.amount,
-                dateAdded: new Date(data.dateAdded),
-                userId: currentUser.id,
-                description: data.description,
-                type: data.type
-            });
-            reset();
-            setSubmitError(null);
-        } catch (error) {
-            console.error("Failed to add transaction", error);
-            setSubmitError("Failed to add transaction. Please try again.");
+        if (data.type === 'income') {
+            const command = new AddIncomeCommand(baseTransactionData);
+            await client.addIncome(command);
+        } else {
+            const command = new AddExpenseCommand(baseTransactionData);
+            await client.addExpense(command);
         }
-    };
+        reset();
+        setSubmitError(null);
+        await onTransactionAdded(data);
+    } catch (error) {
+        console.error("Failed to add transaction", error);
+        setSubmitError("Failed to add transaction. Please try again.");
+    }
+};
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,14 +97,19 @@ const TransactionForm = ({ onTransactionAdded }: { onTransactionAdded: (data: an
                         {errors.amount && <p className="text-red-500">{errors.amount.message}</p>}
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="dateAdded">Date</Label>
-                        <Input id="dateAdded" type="date" {...register("dateAdded")} />
-                        {errors.dateAdded && <p className="text-red-500">{errors.dateAdded.message}</p>}
+                        <Label htmlFor="date">Date</Label>
+                        <Input id="date" type="date" {...register("date")} />
+                        {errors.date && <p className="text-red-500">{errors.date.message}</p>}
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="description">Description</Label>
-                        <Input id="description" type="text" {...register("description")} />
-                        {errors.description && <p className="text-red-500">{errors.description.message}</p>}
+                        <Label htmlFor="title">Title</Label>
+                        <Input id="title" type="text" {...register("title")} />
+                        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="category">Category</Label>
+                        <Input id="category" type="text" {...register("category")} />
+                        {errors.category && <p className="text-red-500">{errors.category.message}</p>}
                     </div>
                 </CardContent>
                 <CardFooter>

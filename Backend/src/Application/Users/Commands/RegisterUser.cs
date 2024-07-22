@@ -8,8 +8,8 @@ namespace Backend.src.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommand : IRequest<IdentityResult>
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public required string Email { get; init; }
+    public required string Password { get; init; }
 }
 
 public class  RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, IdentityResult>

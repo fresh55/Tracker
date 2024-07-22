@@ -6,9 +6,10 @@ namespace Backend.src.Application.Balances2
     {
         public int Id { get; set; }
         public decimal Amount { get; set; }
-        public string Description { get; set; }
+        public required string Title { get; set; }
+        public required string Category { get; set; }
         public DateTime DateAdded { get; set; }
-        public string Type { get; set; } // "Expense" or "Income"
+        public required string Type { get; set; } // "Expense" or "Income"
         public string DateAddedISO => DateAdded.ToString("o");
 
         private class Mapping : Profile

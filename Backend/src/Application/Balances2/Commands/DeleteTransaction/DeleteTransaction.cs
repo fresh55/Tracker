@@ -7,8 +7,8 @@ namespace Backend.src.Application.Balances2.Commands.DeleteTransaction;
 public record DeleteTransactionCommand : IRequest
 {
     public int Id { get; init; }
-    public string UserId { get; init; }
-    public string TransactionType { get; init; }
+    public required string UserId { get; init; }
+    public required string TransactionType { get; init; }
 }
 
 public class DeleteTransactionCommandHandler : IRequestHandler<DeleteTransactionCommand>

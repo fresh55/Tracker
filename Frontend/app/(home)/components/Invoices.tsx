@@ -20,12 +20,15 @@ import {
     DialogTrigger,
     DialogClose
 } from "@/components/ui/dialog"
+import { Badge } from '@/components/ui/badge';
 import { useUser } from '../../../context/UserContext';
 import TransactionForm from './TransactionForm';
 import { fetchTransactions, addTransaction, deleteTransaction } from '../../actions/actions';
 import { useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 import TransactionsSkeleton from './TransactionsSkeleton';
+import clsx from 'clsx';
+
 interface Transaction {
     amount: number;
     dateAdded: string;
@@ -60,24 +63,27 @@ const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => vo
     }, [fetchTransactionsData]);
 
     const handleTransactionAdded = async (data: any) => {
-        const result = await addTransaction(data);
-        if (result.success) {
-            setIsDialogOpen(false);
-            fetchTransactionsData();
-            onTransactionAdded();
-        } else {
-            console.error(result.error);
-        }
-    };
+    try {
+        await onTransactionAdded();
+        setIsDialogOpen(false);
+        fetchTransactionsData();
+    } catch (error) {
+        console.error("Error adding transaction:", error);
+    }
+};
 
-    const handleDelete = async (id: number, transactionType: string) => {
-        if (!currentUser?.id) return;
-        const result = await deleteTransaction(id, currentUser.id, transactionType);
-        if (result.success) {
-            fetchTransactionsData();
-            onTransactionAdded();
-        } else {
-            console.error(result.error);
+    const handleDelete = async (id: number, transactionType: string | undefined) => {
+        if (!currentUser?.id || id === undefined || transactionType === undefined) return;
+        try {
+            const result = await deleteTransaction(id, currentUser.id, transactionType);
+            if (result.success) {
+                fetchTransactionsData();
+                onTransactionAdded();
+            } else {
+                console.error(result.error);
+            }
+        } catch (error) {
+            console.error('Error deleting transaction:', error);
         }
     };
 
@@ -118,66 +124,34 @@ const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => vo
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Transaction</TableHead>
-                                <TableHead >Type</TableHead>
-                                <TableHead className="hidden md:table-cell">Date</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {transactions.map(transaction => (
-                                
-                                <TableRow key={transaction.id}>
-                                    <TableCell className="font-bold">{transaction.description}</TableCell>
-                                    <TableCell className="">{transaction.type}</TableCell>
-                                    <TableCell>{transaction.dateAdded ? new Date(transaction.dateAdded).toLocaleDateString() : 'N/A'}</TableCell>
-                                    <TableCell className="text-right">{transaction.amount}</TableCell>
-                                    <TableCell className="text-right">
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button size="sm" variant="outline">Edit</Button>
-                                            </DialogTrigger>
-                                            <DialogContent className="sm:max-w-[425px]">
-                                                <DialogHeader>
-                                                    <DialogTitle>Edit Transaction</DialogTitle>
-                                                    <DialogDescription>
-                                                        Make changes to your transaction here. Click save when you are done.
-                                                    </DialogDescription>
-                                                </DialogHeader>
-                                                <div className="grid gap-4 py-4">
-                                                    <div className="grid grid-cols-4 items-center gap-4">
-                                                        <Label htmlFor="name" className="text-right">
-                                                            Name
-                                                        </Label>
-                                                        <Input
-                                                            id="name"
-                                                            defaultValue={transaction.type}
-                                                            className="col-span-3"
-                                                        />
-                                                    </div>
-                                                    <div className="grid grid-cols-4 items-center gap-4">
-                                                        <Label htmlFor="amount" className="text-right">
-                                                            Amount
-                                                        </Label>
-                                                        <Input
-                                                            id="amount"
-                                                            defaultValue={transaction.amount}
-                                                            className="col-span-3"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <DialogFooter>
-                                                    <Button type="submit">Save changes</Button>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
-                                        <Dialog>
+                 <Table>
+    <TableHeader>
+        <TableRow>
+            <TableHead>Transaction</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="hidden md:table-cell">Date</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+      {transactions.map(transaction => (
+    <TableRow key={transaction.id}>
+        <TableCell className="font-bold">{transaction.title}</TableCell>
+        <TableCell >
+            <Badge variant="secondary">{transaction.category}</Badge>
+        </TableCell>
+        <TableCell>{transaction.dateAdded ? new Date(transaction.dateAdded).toLocaleDateString('de-DE') : 'N/A'}</TableCell>
+        <TableCell className={clsx(
+            "text-right",
+            transaction.type === 'Income' ? 'text-green-600' : 'text-red-600'
+        )}>
+            {transaction.amount}
+        </TableCell>
+                <TableCell className="text-right">
+                        <Dialog>
                                             <DialogTrigger asChild>
                                                 <Button
-                                                    className="ml-2"
+                                                    className="ml-2 p-1 "
                                                     size="sm"
                                                     variant="destructive"
                                                 >
@@ -197,20 +171,26 @@ const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => vo
                                                             Close
                                                         </Button>
                                                     </DialogClose>
-                                                    <Button
-                                                        variant="destructive"
-                                                        onClick={() => handleDelete(transaction.id, transaction.type)}
-                                                    >
-                                                        Delete
-                                                    </Button>
+                              <Button
+                                  variant="destructive"
+                                  onClick={() =>
+                                      transaction.id !== undefined && transaction.type !== undefined
+                                          ? handleDelete(transaction.id, transaction.type)
+                                          : null
+                                  }
+                              >
+                                  Delete
+                              </Button>
                                                 </DialogFooter>
                                             </DialogContent>
                                         </Dialog>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                </TableCell>
+            </TableRow>
+        ))}
+    </TableBody>
+</Table>
+                                    
+                                  
 
                    
                 </CardContent>

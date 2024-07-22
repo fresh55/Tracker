@@ -1,12 +1,6 @@
-'use server'
-import { Client, TransactionDto, AddIncomeCommand, AddExpenseCommand } from '@/lib/clientApi';
+import { Client, AddIncomeCommand, AddExpenseCommand, DeleteTransactionCommand } from '@/lib/clientApi';
 import { revalidatePath } from 'next/cache';
-
-
-export async function fetchTransactions(userId: string | undefined): Promise<any[]> {
-    if (!userId) {
-        throw new Error("User ID is required");
-    }
+export async function fetchTransactions(userId: string): Promise<any[]> {
     const client = new Client();
     try {
         const data = await client.getTransactions(userId);
@@ -15,7 +9,8 @@ export async function fetchTransactions(userId: string | undefined): Promise<any
             dateAdded: transaction.dateAdded ? transaction.dateAdded.toISOString() : null,
             type: transaction.type,
             id: transaction.id,
-            description: transaction.description
+            title: transaction.title,
+            category: transaction.category
         }));
     } catch (error) {
         console.error("Failed to fetch transactions:", error);
@@ -28,8 +23,9 @@ export async function addTransaction(data: any) {
     try {
         const baseTransactionData = {
             amount: data.amount,
-            dateAdded: new Date(data.dateAdded),
-            description: data.description,
+            dateAdded: new Date(data.date),
+            title: data.title,
+            category: data.category,
             userId: data.userId
         };
 
@@ -48,8 +44,10 @@ export async function addTransaction(data: any) {
             data: {
                 id: result.id,
                 amount: result.amount,
-                description: result.description,
-                date: result.date ? result.date.toISOString() : null
+                title: result.title,
+                category: result.category,
+                date: result.date ? result.date.toISOString() : null,
+                type: data.type
             }
         };
     } catch (error) {
@@ -57,11 +55,16 @@ export async function addTransaction(data: any) {
         return { success: false, error: "Failed to add transaction", details: error };
     }
 }
+
 export async function deleteTransaction(id: number, userId: string, transactionType: string) {
     const client = new Client();
     try {
-        await client.deleteTransaction({ id, userId, transactionType });
-        revalidatePath('/');
+        const command = new DeleteTransactionCommand({
+            id: id,
+            userId: userId,
+            transactionType: transactionType
+        });
+        await client.deleteTransaction(command);
         return { success: true };
     } catch (error) {
         console.error("Failed to delete transaction:", error);

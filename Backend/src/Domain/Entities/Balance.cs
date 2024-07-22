@@ -6,8 +6,8 @@ namespace Backend.src.Domain.Entities
         public decimal TotalAmount { get; set; }
         public List<Expense> Expenses { get; set; }
         public List<Income> Incomes { get; set; }
-        public string ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public required string ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
 
         public Balance()
         {

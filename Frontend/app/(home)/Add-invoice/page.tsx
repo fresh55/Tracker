@@ -8,8 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {Client } from '@/lib/clientApi';
+import { Client, AddExpenseCommand, AnalyzeInvoiceResult } from '@/lib/clientApi';
 import AIProcessingModal from './components/AIProcessingModal';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
+
+
 const invoiceSchema = z.object({
     title: z.string().min(1, { message: "Title is required" }),
     totalAmount: z.number().positive({ message: "Total Amount must be positive" }),
@@ -26,64 +30,73 @@ const AddInvoice: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [isAiGenerated, setIsAiGenerated] = useState({ title: false, totalAmount: false, category: false, dateAdded: false });
     const [isAiProcessing, setIsAiProcessing] = useState(false);
+    const { currentUser } = useUser();
+    const router = useRouter();
+        
     const onSubmit: SubmitHandler<InvoiceFormData> = async (data) => {
+        if (!currentUser) {
+            alert("User not authenticated");
+            return;
+        }
+
         try {
-            const response = await fetch('/api/invoices', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
+            const client = new Client();
+            const command = new AddExpenseCommand({
+                amount: data.totalAmount,
+                dateAdded: new Date(data.dateAdded),
+                userId: currentUser.id,
+                title: data.title,
+                category: data.category
             });
+            const result = await client.addExpense(command);
 
-            if (!response.ok) {
-                throw new Error('Failed to create invoice');
-            }
-
-            alert('Invoice created successfully!');
-            // Reset form or redirect user
+            router.push('/'); // Redirect to home page
         } catch (error) {
-            console.error('Error creating invoice:', error);
-            alert('Failed to create invoice');
+            console.error('Error adding expense:', error);
+            alert('Failed to add expense');
         }
     };
 
-const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("File change event triggered");
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-        console.log("File selected:", selectedFile.name);
-        setFile(selectedFile);
-        setIsAiProcessing(true);
-        console.log("isAiProcessing set to true");
-        try {
-            console.log("Sending file for analysis");
-            const client = new Client();
-            const response = await client.postApiInvoicesAnalyze({ data: selectedFile, fileName: selectedFile.name });
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("File change event triggered");
+        const selectedFile = event.target.files?.[0];
+        if (selectedFile) {
+            console.log("File selected:", selectedFile.name);
+            setFile(selectedFile);
+            setIsAiProcessing(true);
+            console.log("isAiProcessing set to true");
+            try {
+                console.log("Sending file for analysis");
+                const client = new Client();
+                const response = await client.postApiInvoicesAnalyze({ data: selectedFile, fileName: selectedFile.name });
 
-            console.log("Analysis response:", response);
-            if (response) {
-                setValue('title', response.title || '');
-                setValue('totalAmount', response.totalAmount || 0);
-                setValue('category', response.category || '');
-                setValue('dateAdded', response.date instanceof Date
-                    ? response.date.toISOString().split('T')[0]
-                    : typeof response.date === 'string'
-                        ? response.date.split('T')[0]
-                        : new Date().toISOString().split('T')[0]
-                );
-                setIsAiGenerated({ title: true, totalAmount: true, category: true, dateAdded: true });
-            } else {
-                throw new Error('Failed to analyze invoice');
+                console.log("Analysis response:", response);
+                if (response) {
+                    setValue('title', response.title || '');
+                    setValue('totalAmount', response.totalAmount || 0);
+                    setValue('category', response.category || '');
+                    setValue('dateAdded', formatDate(response.date));
+                    setIsAiGenerated({ title: true, totalAmount: true, category: true, dateAdded: true });
+                } else {
+                    throw new Error('Failed to analyze invoice');
+                }
+            } catch (error) {
+                console.error('Error analyzing invoice:', error);
+                alert('Failed to analyze invoice');
+            } finally {
+                setIsAiProcessing(false);
             }
-        } catch (error) {
-            console.error('Error analyzing invoice:', error);
-            alert('Failed to analyze invoice');
-        } finally {
-            setIsAiProcessing(false);
         }
-    }
-};
+    };
+
+    const formatDate = (date: Date | string | undefined): string => {
+        if (date instanceof Date) {
+            return date.toISOString().split('T')[0];
+        } else if (typeof date === 'string') {
+            return date.split('T')[0];
+        }
+        return new Date().toISOString().split('T')[0];
+    };
 
     return (
         <>
@@ -92,7 +105,7 @@ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
                 <CardTitle>Add Invoice</CardTitle>
                 <CardDescription>Upload an invoice or enter details manually.</CardDescription>
             </CardHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
+                      <form onSubmit={handleSubmit(onSubmit)}>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="file">Upload Invoice</Label>
@@ -160,6 +173,7 @@ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
                     </Button>
                 </CardFooter>
             </form>
+
            
         </Card>
          <AIProcessingModal isOpen={isAiProcessing} />

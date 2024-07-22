@@ -14,7 +14,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-
+import TransactionForm from "@/app/(home)/components/TransactionForm"
 import  CreateInvoicePage  from "@/components/InputInvoice" 
 interface EmptyPlaceholderProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -43,8 +43,7 @@ export function EmptyPlaceholder({
                  
                         <div className="">
                             <div className="">
-                             
-                                <CreateInvoicePage />
+                                <TransactionForm onTransactionAdded={async () => { }} />
                             </div>
                         
                         </div>
