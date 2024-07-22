@@ -22,31 +22,29 @@ export default function LoginForm() {
         formState: { errors },
     } = useForm<FieldValues>();
 
+const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const client = new Client();
+    setIsLoading(true);
+    setServerMessage(null); // Clear previous server messages
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const client = new Client();
-        setIsLoading(true);
-        setServerMessage(null); // Clear previous server messages
+    try {
+        const loginRequest = new LoginRequest();
+        loginRequest.email = data.email;
+        loginRequest.password = data.password;
 
-        try {
-            const loginRequest = new LoginRequest();
-            loginRequest.email = data.email;
-            loginRequest.password = data.password;
-
-
-            const response  = await client.postApiUserLogin(true,true,loginRequest);
-            console.log("***********************************************************");
-            console.log(response);
-            console.log("***********************************************************");
-            window.location.href = "/"
-        } catch (error) {
-            console.error("Failed to login:", error);
-            setServerMessage("Failed to login");
+        const response = await client.postApiUserLogin(true, true, loginRequest);
+        console.log("Login response:", response);
+        window.location.href = "/";
+    } catch (error) {
+        console.error("Failed to login:", error);
+        if (error instanceof Error && error.message.includes("401")) {
+            setServerMessage("Invalid email or password. Please try again.");
+        } else {
+            setServerMessage("An error occurred. Please try again later.");
         }
-        setIsLoading(false);
-
     }
-
+    setIsLoading(false);
+};
 
     return (
         <div className="grid gap-6">

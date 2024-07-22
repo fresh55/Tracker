@@ -10,26 +10,21 @@ public class AnalyzeInvoiceResult
 {
     public decimal TotalAmount { get; set; }
     public string Category { get; set; }
+    public DateTime Date { get; set; }
+    public string Title { get; set; }
 }
 
 public class AnalyzeInvoiceCommandHandler : IRequestHandler<AnalyzeInvoiceCommand, AnalyzeInvoiceResult>
 {
-    private readonly IOcrService _ocrService;
+    private readonly ITextAnalysisService _textAnalysisService;
 
-    public AnalyzeInvoiceCommandHandler(IOcrService ocrService)
+    public AnalyzeInvoiceCommandHandler(ITextAnalysisService textAnalysisService)
     {
-        _ocrService = ocrService;
+        _textAnalysisService = textAnalysisService;
     }
 
     public async Task<AnalyzeInvoiceResult> Handle(AnalyzeInvoiceCommand request, CancellationToken cancellationToken)
     {
-        var extractedText = await _ocrService.ExtractTextFromImage(request.File);
-
-        Console.WriteLine(extractedText);
-        return new AnalyzeInvoiceResult
-        {
-            TotalAmount = 2,
-            Category = "NEKE"
-        };
+        return await _textAnalysisService.AnalyzeInvoice(request.File);
     }
 }

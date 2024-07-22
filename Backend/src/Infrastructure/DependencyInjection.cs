@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Backend.src.Infrastructure.Services;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
-
+using Backend.src.Infrastructure.Services;
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
@@ -35,11 +35,12 @@ public static class DependencyInjection
                 Endpoint = configuration["AzureComputerVision:Endpoint"]
             };
         });
+       
 
-     
 
         services.AddScoped<IOcrService, OcrService>();
 
+        services.AddScoped<ITextAnalysisService, OpenAIInvoiceAnalysisService>();
         return services;
     }
 }

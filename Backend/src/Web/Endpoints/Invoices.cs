@@ -4,7 +4,9 @@ using Backend.src.Application.Invoices.Commands.DeleteInvoice;
 using Backend.src.Application.Invoices.Queries.GetInvoices;
 using Backend.src.Application.Invoices.Queries.GetTotalAmount;
 using Backend.src.Application.Invoices.Commands.AnalyzeInvoice;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 namespace Backend.src.Web.Endpoints;
 
 public class Invoices : EndpointGroupBase
@@ -15,8 +17,12 @@ public class Invoices : EndpointGroupBase
             .MapGet(GetAllInvoices)
             .MapGet(GetTotalInvoiceAmount, "/total-amount")
             .MapPost(CreateInvoice)
-            .MapDelete(DeleteInvoices, "{id}")
-            .MapPost(AnalyzeInvoice, "/analyze");
+            .MapDelete(DeleteInvoices, "{id}");
+           
+
+        app.MapPost("/api/Invoices/analyze", AnalyzeInvoice)
+        .AllowAnonymous()
+        .DisableAntiforgery();
     }
 
     public Task<List<InvoiceDto>> GetAllInvoices( ISender sender)
@@ -40,15 +46,12 @@ public class Invoices : EndpointGroupBase
         await sender.Send(new DeleteInvoiceCommand(id));
         return Results.NoContent();
     }
-
-    public async Task<AnalyzeInvoiceResult> AnalyzeInvoice(ISender sender,AnalyzeInvoiceCommand command)
+    [IgnoreAntiforgeryToken]
+    [DisableRequestSizeLimit]
+    [AllowAnonymous]
+    public async Task<AnalyzeInvoiceResult> AnalyzeInvoice(ISender sender, IFormFile file)
     {
-
-        await sender.Send(command);
-        return new AnalyzeInvoiceResult
-        {
-            TotalAmount = 2,
-            Category = "NEKE"
-        };
+        var command = new AnalyzeInvoiceCommand { File = file };
+        return await sender.Send(command);
     }
 }

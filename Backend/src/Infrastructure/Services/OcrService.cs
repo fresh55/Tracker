@@ -9,9 +9,15 @@ public class OcrService : IOcrService
 {
     private readonly IComputerVisionClient _computerVisionClient;
 
-    public OcrService(IComputerVisionClient computerVisionClient)
+    public OcrService(IConfiguration configuration)
     {
-        _computerVisionClient = computerVisionClient;
+        string endpoint = configuration["Endpoint"];
+        string key = configuration["Azure:ApiKey"];
+
+        _computerVisionClient = new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
+        {
+            Endpoint = endpoint
+        };
     }
 
     public async Task<string> ExtractTextFromImage(IFormFile file)

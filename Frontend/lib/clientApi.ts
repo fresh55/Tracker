@@ -8,6 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+
 export class Client {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -24,7 +25,6 @@ export class Client {
         this.baseUrl = baseUrl ?? "http://localhost:5093";
 
     }
-
     createBalance(command: CreateBalanceCommand): Promise<BalanceDto> {
         let url_ = this.baseUrl + "/api/Balance";
         url_ = url_.replace(/[?&]$/, "");
@@ -444,6 +444,46 @@ export class Client {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    postApiInvoicesAnalyze(file: FileParameter | null | undefined): Promise<AnalyzeInvoiceResult> {
+        let url_ = this.baseUrl + "/api/Invoices/analyze";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file !== null && file !== undefined)
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPostApiInvoicesAnalyze(_response);
+        });
+    }
+
+
+    protected processPostApiInvoicesAnalyze(response: Response): Promise<AnalyzeInvoiceResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = AnalyzeInvoiceResult.fromJS(resultData200);
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AnalyzeInvoiceResult>(null as any);
     }
 
     getUserName(userId: string): Promise<void> {
@@ -1427,6 +1467,54 @@ export interface ICreateInvoiceCommand {
     title?: string | undefined;
     totalAmount?: number;
     dateAdded?: Date;
+}
+
+export class AnalyzeInvoiceResult implements IAnalyzeInvoiceResult {
+    totalAmount?: number;
+    category?: string;
+    date?: Date;
+    title?: string;
+
+    constructor(data?: IAnalyzeInvoiceResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalAmount = _data["totalAmount"];
+            this.category = _data["category"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): AnalyzeInvoiceResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalyzeInvoiceResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalAmount"] = this.totalAmount;
+        data["category"] = this.category;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["title"] = this.title;
+        return data;
+    }
+}
+
+export interface IAnalyzeInvoiceResult {
+    totalAmount?: number;
+    category?: string;
+    date?: Date;
+    title?: string;
 }
 
 export class IdentityUserOfString implements IIdentityUserOfString {
@@ -2489,6 +2577,11 @@ export interface IInfoRequest {
     newEmail?: string | undefined;
     newPassword?: string | undefined;
     oldPassword?: string | undefined;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class ApiException extends Error {

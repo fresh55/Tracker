@@ -8,12 +8,12 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "Azure__ApiKey": "269649fed6d845aeab1d053eb42d5b62",
         "Endpoint": "https://tracker.cognitiveservices.azure.com/",
-
+        "OpenAI__ApiKey": "sk-proj-AINYmI7ukr9PCIIP7z8BT3BlbkFJQvjV3g6WahI4SEh3S1Ue"
 
       },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5093"
-    },
+        "dotnetRunMessages": true,
+        "applicationUrl": "http://localhost:5093"
+      },
     "https": {
       "commandName": "Project",
       "launchBrowser": true,

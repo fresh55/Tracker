@@ -2,7 +2,8 @@
 using Backend;
 using Backend.src.Application;
 using Backend.src.Infrastructure.Data;
-
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Antiforgery;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +37,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 app.UseCors();
+
+
 
 app.MapRazorPages();
 
