@@ -10,8 +10,8 @@ public class ApplicationUser : IdentityUser
     public string? LastName { get; set; }
     [PersonalData]
     public int? UsernameChangeLimit { get; set; } = 10;
-    public Balance Balance { get; set; }
+    public Balance? Balance { get; set; }
 
- 
+
 
 }

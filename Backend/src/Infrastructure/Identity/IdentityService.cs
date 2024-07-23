@@ -43,19 +43,12 @@ namespace Backend.src.Infrastructure.Identity
 
         public async Task<string> GetUserNameAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            return user?.UserName;
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user?.UserName ?? string.Empty;
         }
 
 
-        public async Task<bool> IsInRoleAsync(string userId, string role)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            return user != null && await _userManager.IsInRoleAsync(user, role);
-        }
-
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+            public async Task<Result> DeleteUserAsync(ApplicationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
 

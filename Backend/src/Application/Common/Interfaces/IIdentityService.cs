@@ -8,7 +8,7 @@ namespace Backend.src.Application.Common.Interfaces;
     public interface IIdentityService
     {
         Task<string> GetUserNameAsync(string userId);
-        Task<bool> IsInRoleAsync(string userId, string role);
+
  
         Task<string> GetUserIdAsync(ClaimsPrincipal user);
 

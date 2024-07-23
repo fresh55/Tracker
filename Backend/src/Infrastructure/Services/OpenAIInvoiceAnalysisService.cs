@@ -27,10 +27,10 @@ public class OpenAIInvoiceAnalysisService : ITextAnalysisService
             Temperature = 0.2,
             MaxTokens = 150,
             Messages = new[]
-    {
-        new ChatMessage(ChatMessageRole.System, "You are an AI assistant that analyzes invoice text and extracts the total amount, category, date, and generates a title. Respond in JSON format with 'totalAmount', 'category', 'date', and 'title' fields."),
-        new ChatMessage(ChatMessageRole.User, extractedText)
-    }
+            {
+            new ChatMessage(ChatMessageRole.System, "You are an AI assistant that analyzes invoice text and extracts the total amount, category, date, and generates a title. Respond in JSON format with 'totalAmount', 'category', 'date', and 'title' fields."),
+            new ChatMessage(ChatMessageRole.User, extractedText)
+        }
         };
 
         var chatResult = await _openAI.Chat.CreateChatCompletionAsync(chatRequest);
@@ -40,7 +40,7 @@ public class OpenAIInvoiceAnalysisService : ITextAnalysisService
             throw new Exception("Failed to get a response from OpenAI");
         }
 
-        var responseText = chatResult.Choices[0].Message.Content;
+        var responseText = chatResult.Choices[0].Message.TextContent;
         return ParseResponse(responseText);
     }
 

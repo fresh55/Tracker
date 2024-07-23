@@ -3,15 +3,15 @@ namespace Backend.src.Application.Invoices.Commands.AnalyzeInvoice;
 
 public class AnalyzeInvoiceCommand : IRequest<AnalyzeInvoiceResult>
 {
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }
 
 public class AnalyzeInvoiceResult
 {
     public decimal TotalAmount { get; set; }
-    public string Category { get; set; }
+    public string Category { get; set; } = string.Empty;
     public DateTime Date { get; set; }
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 }
 
 public class AnalyzeInvoiceCommandHandler : IRequestHandler<AnalyzeInvoiceCommand, AnalyzeInvoiceResult>

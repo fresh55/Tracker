@@ -38,7 +38,10 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "Azure__ApiKey": "269649fed6d845aeab1d053eb42d5b62",
+        "Endpoint": "https://tracker.cognitiveservices.azure.com/",
+        "OpenAI__ApiKey": "sk-proj-AINYmI7ukr9PCIIP7z8BT3BlbkFJQvjV3g6WahI4SEh3S1Ue"
       },
       "publishAllPorts": true,
       "useSSL": true
