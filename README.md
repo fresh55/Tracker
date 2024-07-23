@@ -26,7 +26,7 @@ Financial Tracker is full-stack application for finance management. Leveraging t
 
 ![AI Invoice Analysis Demo](https://imgur.com/RJhKUuX.gif)
 
-This GIF showcases our AI-powered invoice analysis feature. System quickly scans and extracts key information from an invoice, automatically populating relevant fields and categorizing expenses. This smart automation streamlines data entry and enhances accuracy in financial tracking.
+This GIF showcases AI-powered invoice analysis feature. System quickly scans and extracts key information from an invoice, automatically populating relevant fields and categorizing expenses. This smart automation streamlines data entry and enhances accuracy in financial tracking.
 
 
 
