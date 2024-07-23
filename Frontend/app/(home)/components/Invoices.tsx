@@ -28,6 +28,7 @@ import { useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 import TransactionsSkeleton from './TransactionsSkeleton';
 import clsx from 'clsx';
+import TransactionCharts from './TransactionCharts';
 
 interface Transaction {
     amount: number;
@@ -94,7 +95,7 @@ const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => vo
 
     if (transactions.length === 0) {
         return (
-            <EmptyPlaceholder>
+            <EmptyPlaceholder onTransactionAdded={handleTransactionAdded}>
                 <EmptyPlaceholder.Icon />
                 <EmptyPlaceholder.Title>No transactions</EmptyPlaceholder.Title>
                 <EmptyPlaceholder.Description>
@@ -107,8 +108,9 @@ const TransactionsPage = ({ onTransactionAdded }: { onTransactionAdded: () => vo
   
 
     return (
-        <div>
-            <Card>
+        <div className="space-y-8">
+            <TransactionCharts transactions={transactions} />
+            <Card >
                 <CardHeader className="px-7">
                     <CardTitle>History</CardTitle>
                     <CardDescription>Recent expenses and transactions</CardDescription>
