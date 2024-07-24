@@ -50,7 +50,7 @@ Feature that utilizes OpenAI's GPT-4 model to analyze invoices:
 - CQRS pattern with MediatR
   
  #### Testing
-- xUnit for backend unit and integration tests
+- xUnit for backend unit tests
 
 
 ### Frontend
