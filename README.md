@@ -18,7 +18,7 @@ Financial Tracker is full-stack application for finance management. Leveraging t
 
 - 🤖 AI-Powered Invoice Analysis using OpenAI
 - 💰 Intelligent Income and Expense Categorization
-- 📈 Automated Balance Management and Visual Charts
+- 📈 Automated Balance Management and Visual Chart
 - 👤 Secure User Authentication
 - 🔄 Real-time Financial Updates
 
@@ -43,7 +43,7 @@ Feature that utilizes OpenAI's GPT-4 model to analyze invoices:
 ## 🛠️ Tech Stack
 
 ### Backend
-- c# ASP.NET Core 8.0
+- C# ASP.NET Core 8.0
 - Entity Framework Core 8.0
 - SQL Server for robust data storage
 - OpenAI API integration
@@ -65,11 +65,3 @@ Feature that utilizes OpenAI's GPT-4 model to analyze invoices:
 - Docker support for easy deployment
 - Visual Studio for development
 - Git for version control
-
-## 🙏 Acknowledgements
-
-- [OpenAI](https://openai.com/) for their powerful GPT-4 model
-- [Next.js](https://nextjs.org/)
-- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
